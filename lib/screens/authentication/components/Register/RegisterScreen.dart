@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:joy_way/widgets/AnimationContainer/FadeContainer.dart';
-import 'package:joy_way/widgets/AnimationContainer/MoveAndFadeInContainer.dart';
-import 'package:joy_way/widgets/AnimationContainer/ScaleContainer.dart';
 import '../../../../services/FirebaseServices/Authentication.dart';
 import '/config/GeneralSpecifications.dart';
 
-class LoginScreen extends StatefulWidget {
+class RegisterScreen extends StatefulWidget {
   final int type;
   final bool scaleForLoading;
   final String messages;
@@ -17,7 +15,7 @@ class LoginScreen extends StatefulWidget {
   final Function(int) onTypeChanged;
 
 
-  const LoginScreen({
+  const RegisterScreen({
     super.key,
     required this.type,
     required this.scaleForLoading,
@@ -30,25 +28,28 @@ class LoginScreen extends StatefulWidget {
   });
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<RegisterScreen> createState() => _RegisterScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _RegisterScreenState extends State<RegisterScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  // Services
+  final _confirmPasswordController = TextEditingController();
+
+  //Service
   final Authentication auth = Authentication();
   String _message = "";
-
-  Future<bool> _LoginIn() async {
+  Future<bool> _Register() async {
     String email = _emailController.text.trim();
     String password = _passwordController.text;
+    String confirmPassword = _confirmPasswordController.text;
 
-    if (auth.checkBeforeSendingSignIn(email, password)) {
-      String? errorMessage = await auth.signIn(email, password);
+    if (auth.checkBeforeSendingSignUp(email, password, confirmPassword)) {
+      String? errorMessage = await auth.signUp(email, password);
+
       if (errorMessage == null) {
         setState(() {
-          _message = 'Congratulations you have successfully logged in!';
+          _message = 'Congratulations on your successful registration!';
         });
         return true;
       } else {
@@ -59,11 +60,12 @@ class _LoginScreenState extends State<LoginScreen> {
       }
     } else {
       setState(() {
-        _message = auth.validateInputSignIn(email, password);
+        _message = auth.validateInputSignUp(email, password, confirmPassword);
       });
       return false;
     }
   }
+
 
 
 
@@ -73,15 +75,15 @@ class _LoginScreenState extends State<LoginScreen> {
     "assets/icons/apple.png",
   ];
   List<bool> animation = List<bool>.filled(10, false);
-  bool _obscurePass = true;
+  bool _obscurePass1 = true;
+  bool _obscurePass2 = true;
+
   void setListFalse  (List<bool> list) {
     for(int i = 0 ; i < list.length; i++ )
-      {
-        list[i] = false;
-      }
+    {
+      list[i] = false;
+    }
   }
-
-
   @override
   void initState() {
     Future.delayed(Duration(milliseconds: 500), () {
@@ -91,6 +93,7 @@ class _LoginScreenState extends State<LoginScreen> {
         });
       }
     });
+
     super.initState();
   }
 
@@ -107,18 +110,34 @@ class _LoginScreenState extends State<LoginScreen> {
         AnimatedPositioned(
           top: widget.scaleForLoading
               ? specs.screenHeight
-              : specs.screenHeight * 0.35,
+              : specs.screenHeight * 0.4,
           left: -10,
           duration: Duration(milliseconds: 100),
           child: Container(
-            height: specs.screenHeight * 0.6,
+            // color: Colors.red,
+            height: specs.screenHeight * 0.57,
             width: specs.screenWidth,
             padding: EdgeInsets.symmetric(vertical: 5, horizontal: 20),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
+                SizedBox(),
+                FadeContainer(
+                  animation: animation[0],
+                  fatherHeight: 40,
+                  fatherWidth: specs.screenWidth,
+                  duration: Duration(milliseconds: 500),
+                  child: Text(
+                    "Register",
+                    style: GoogleFonts.outfit(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 30,
+                    ),
+                  ),
+                ),
                 Container(
-                  height: 260,
+                  height: 300,
+                  // color: Colors.yellowAccent,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
@@ -215,7 +234,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   ),
                                   child: TextField(
                                     controller: _passwordController,
-                                    obscureText: _obscurePass,
+                                    obscureText: _obscurePass1,
                                     keyboardType: TextInputType.visiblePassword,
                                     decoration: InputDecoration(
                                       filled: true,
@@ -247,12 +266,12 @@ class _LoginScreenState extends State<LoginScreen> {
 
                                       suffixIcon: IconButton(
                                         icon: Icon(
-                                          _obscurePass ? Icons.visibility_off : Icons.visibility,
+                                          _obscurePass1 ? Icons.visibility_off : Icons.visibility,
                                           color: Colors.grey,
                                         ),
                                         onPressed: () {
                                           setState(() {
-                                            _obscurePass = !_obscurePass;
+                                            _obscurePass1 = !_obscurePass1;
                                           });
                                         },
                                       ),
@@ -268,35 +287,72 @@ class _LoginScreenState extends State<LoginScreen> {
                         height: 10,
                       ),
                       Container(
-                        height: 20,
+                        height: 60,
                         width: specs.screenWidth,
                         child: Stack(
                           children: [
                             AnimatedPositioned(
-                              duration: Duration(milliseconds: 500),
                               curve: Curves.easeOutExpo,
-                              right: animation[3] ? 0 : 60,
+                              duration: Duration(milliseconds: 500),
+                              left: animation[2] ? 0 : 100,
                               top: 0,
                               child: AnimatedOpacity(
+                                opacity: animation[2] ? 1.0 : 0.0,
                                 duration: Duration(milliseconds: 500),
-                                opacity: animation[3] ? 1.0 : 0.0,
-                                curve: Curves.easeOutExpo,
-                                child: GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      animation = List<bool>.filled(10, false);
-                                    });
-                                    Future.delayed(Duration(milliseconds: 500), () {
-                                      setState(() {
-                                        widget.onTypeChanged(2);
-                                      });
-                                    });
-                                  },
-                                  child: Text(
-                                    "Recovery Password",
-                                    style: GoogleFonts.outfit(
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: 14,
+                                child: Container(
+                                  width: specs.screenWidth - 40,
+                                  decoration: BoxDecoration(
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black.withOpacity(0.02),
+                                        blurRadius: 10,
+                                        offset: Offset(0, 1),
+                                      ),
+                                    ],
+                                  ),
+                                  child: TextField(
+                                    controller: _confirmPasswordController,
+                                    obscureText: _obscurePass2,
+                                    keyboardType: TextInputType.visiblePassword,
+                                    decoration: InputDecoration(
+                                      filled: true,
+                                      fillColor: Colors.white,
+                                      contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
+                                      hintText: "Confirm Password",
+                                      hintStyle: GoogleFonts.outfit(
+                                        color: Colors.grey,
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 14,
+                                      ),
+
+                                      enabledBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                        borderSide: BorderSide.none,
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                        borderSide: BorderSide(
+                                          color: specs.pantoneColor,
+                                          width: 2.0,
+                                          style: BorderStyle.solid,
+                                        ),
+                                      ),
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                        borderSide: BorderSide.none,
+                                      ),
+
+                                      suffixIcon: IconButton(
+                                        icon: Icon(
+                                          _obscurePass2 ? Icons.visibility_off : Icons.visibility,
+                                          color: Colors.grey,
+                                        ),
+                                        onPressed: () {
+                                          setState(() {
+                                            _obscurePass2 = !_obscurePass2;
+                                          });
+                                        },
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -306,7 +362,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                       SizedBox(
-                        height: 35,
+                        height: 20,
                       ),
                       Container(
                         height: 55,
@@ -325,13 +381,13 @@ class _LoginScreenState extends State<LoginScreen> {
                                 child: GestureDetector(
                                   onTap: () async {
                                     widget.onScaleChangedLoading(true);
-                                    bool success = await _LoginIn();
+                                    bool success = await _Register();
                                     if (success) {
-                                      await Future.delayed(const Duration(milliseconds: 3000));
+                                      await Future.delayed(const Duration(milliseconds: 2000));
                                       widget.onGotoHomePage(true);
                                     } else {
                                       widget.onMessages(_message);
-                                      await Future.delayed(const Duration(milliseconds: 3000));
+                                      await Future.delayed(const Duration(milliseconds: 2000));
                                       widget.onUnsuccessful(true);
                                     }
                                   },
@@ -369,89 +425,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     ],
                   ),
                 ),
-                MoveAndFadeInContainer(
-                  fatherHeight: 20,
-                  fatherWidth: specs.screenWidth - 40,
-                  heightOfChild: 15,
-                  widthOfChild: specs.screenWidth - 40,
-                  type: 3,
-                  duration: Duration(milliseconds: 500),
-                  curve: Curves.easeOutExpo,
-                  animation: animation[5],
-                  child: Container(
-                    height: 15,
-                    width: specs.screenWidth - 40,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          width: 80,
-                          height: 1,
-                          decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                            colors: [
-                              Colors.white,
-                              Colors.grey,
-                            ],
-                            begin: Alignment.centerLeft,
-                            end: Alignment.centerRight,
-                          )),
-                        ),
-                        Text(
-                          "Or continue with",
-                          style: GoogleFonts.outfit(
-                            color: specs.bl80,
-                            fontSize: 14,
-                          ),
-                        ),
-                        Container(
-                          width: 80,
-                          height: 1,
-                          decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                            colors: [
-                              Colors.grey,
-                              Colors.white,
-                            ],
-                            begin: Alignment.centerLeft,
-                            end: Alignment.centerRight,
-                          )),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: List.generate(
-                    3,
-                    (index) => ScaleContainer(
-                      fatherHeight: 70,
-                      fatherWidth: 90,
-                      animation: animation[index + 6],
-                      duration: Duration(milliseconds: 1000),
-                      child: Container(
-                        width: 80,
-                        height: 50,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(
-                            color: Colors.white,
-                            width: 1,
-                            style: BorderStyle.solid,
-                          ),
-                        ),
-                        child: Center(
-                          child: Image.asset(
-                            assetsIcons[index],
-                            height: 30,
-                            width: 30,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
                 FadeContainer(
                   fatherWidth: specs.screenWidth - 40,
                   fatherHeight: 20,
@@ -461,7 +434,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        "Not a member? ",
+                        "You are already a member? ",
                         style: GoogleFonts.outfit(
                           fontSize: 13,
                           fontWeight: FontWeight.w400,
@@ -474,12 +447,12 @@ class _LoginScreenState extends State<LoginScreen> {
                           });
                           Future.delayed(Duration(milliseconds: 500), () {
                             setState(() {
-                              widget.onTypeChanged(1);
+                              widget.onTypeChanged(0);
                             });
                           });
                         },
                         child: Text(
-                          "Register now",
+                          "Login now",
                           style: GoogleFonts.outfit(
                             color: specs.pantoneColor,
                             fontSize: 13,

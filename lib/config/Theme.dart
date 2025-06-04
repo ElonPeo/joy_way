@@ -5,6 +5,6 @@ class AppTheme {
   static final ThemeData themeData = ThemeData(
     colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
     useMaterial3: true,
-    textTheme: GoogleFonts.comfortaaTextTheme(),
+    textTheme: GoogleFonts.outfitTextTheme(),
   );
 }

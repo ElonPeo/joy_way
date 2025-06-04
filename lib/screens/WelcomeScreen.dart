@@ -1,15 +1,12 @@
 import 'dart:async';
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:joy_way/screens/authentication/components/Login/LoginScreen.dart';
-import 'package:joy_way/widgets/AnimationContainer/FadeInContainer.dart';
-import 'package:joy_way/widgets/AnimationContainer/FadeOutContainer.dart';
 import 'package:joy_way/widgets/AnimationContainer/RightToLeftContainer.dart';
-import 'package:joy_way/widgets/ShowGeneralDialog.dart';
 import 'package:video_player/video_player.dart';
 import '../config/GeneralSpecifications.dart';
 import 'package:google_fonts/google_fonts.dart';
+
+import '../widgets/AnimationContainer/FadeContainer.dart';
+import 'authentication/components/FoundationOfAuth.dart';
 
 class WelcomeScreen extends StatefulWidget {
   @override
@@ -27,12 +24,24 @@ class _WelcomeScreenState extends State<WelcomeScreen>
   Timer? _timer;
   int textIndex = 0;
   int textIndex2 = 0;
+  bool showIntroText = false;
+  bool showStartButton = false;
   bool showLogin = false;
   bool scaleScreen = false;
+  bool move = false;
   @override
   void initState() {
     super.initState();
-
+    Future.delayed(Duration(milliseconds: 6000), () {
+      setState(() {
+        showIntroText = true;
+      });
+    });
+    Future.delayed(Duration(milliseconds: 6000), () {
+      setState(() {
+        showStartButton = true;
+      });
+    });
     Future.delayed(Duration(milliseconds: 3000), () {
       setState(() {
         animate = true;
@@ -94,9 +103,8 @@ class _WelcomeScreenState extends State<WelcomeScreen>
         width: specs.screenWidth,
         child: Stack(
           children: [
-            Loginscreen(),
-            AnimatedPositioned(
-              left: showLogin ? - specs.screenWidth :0,
+            AnimatedOpacity(
+              opacity: move ? 0 : 1,
               duration: Duration(milliseconds: 200),
               child: AnimatedScale(
                   duration: Duration(milliseconds: 200),
@@ -131,15 +139,6 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                         height: specs.screenHeight,
                         child: Stack(
                           children: [
-                            FadeOutContainer(
-                              height: specs.screenHeight,
-                              width: specs.screenWidth,
-                              child: Container(
-                                height: specs.screenHeight,
-                                width: specs.screenWidth,
-                                color: Colors.white,
-                              ),
-                            ),
                             AnimatedPositioned(
                               left: animate ? 0 : (specs.screenWidth - 290) / 2,
                               top: animate
@@ -206,25 +205,25 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                                   Column(
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
-                                      FadeInContainer(
+                                      FadeContainer(
                                         duration: Duration(milliseconds: 1000),
-                                        delay: Duration(milliseconds: 5000),
-                                        width: specs.screenWidth * 0.8,
-                                        height: 130,
+                                        fatherWidth: specs.screenWidth * 0.8,
+                                        fatherHeight: 130,
+                                        animation: showIntroText,
                                         child: Text(
                                           "Start your adventure with JoyWay and share your route in real time, "
                                           "a friend can join you and enjoy the journey together.",
                                           style: TextStyle(
-                                            fontSize: 15,
-                                            color: Color.fromRGBO(100, 100, 100, 1),
+                                            fontSize: 13,
+                                            color: specs.bl80,
                                           ),
                                         ),
                                       ),
                                       RightToLeftContainer(
-                                        height: 40,
-                                        width: specs.screenWidth,
+                                        animation: showStartButton,
+                                        fatherHeight: 40,
+                                        fatherWidth: specs.screenWidth,
                                         duration: Duration(milliseconds: 1000),
-                                        delay: Duration(milliseconds: 6000),
                                         distance_traveled: 50,
                                         child: GestureDetector(
                                           child: AnimatedContainer(
@@ -248,10 +247,24 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                                             setState(() {
                                               scaleScreen = true;
                                             });
-                                            Future.delayed(Duration(milliseconds: 500), () {
+
+                                            Future.delayed(Duration(milliseconds: 200), () {
+                                              setState(() {
+                                                move = true;
+                                              });
+                                            });
+
+                                            Future.delayed(Duration(milliseconds: 400), () {
                                               setState(() {
                                                 showLogin = true;
                                               });
+                                            });
+
+
+
+                                            Future.delayed(Duration(milliseconds: 1000), () {
+                                              Navigator.pushNamed(context, '/login');
+
                                             });
                                           },
                                         ),
@@ -269,7 +282,6 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                 ),
               ),
             ),
-
           ],
         ),
       ),

@@ -1,67 +1,54 @@
 import 'package:flutter/material.dart';
 
 class ScaleContainer extends StatefulWidget {
-  final double width;
-  final double height;
-  final BorderRadius borderRadius;
+  final double fatherWidth;
+  final double fatherHeight;
   final Widget child;
   final Duration duration;
   final Color firstColor;
   final Color secondColor;
+  final bool animation;
+  final Curve curve;
 
   const ScaleContainer({
     super.key,
-    this.width = 100,
-    this.height = 100,
-    this.borderRadius = const BorderRadius.all(Radius.circular(20)),
+    required this.fatherHeight,
+    required this.fatherWidth,
+    required this.animation,
     required this.child,
-    this.duration = const Duration(milliseconds: 100),
+    this.duration = const Duration(milliseconds: 500),
     this.firstColor = const Color.fromRGBO(252, 239, 203, 1),
     this.secondColor = const Color.fromRGBO(254, 93, 38, 1),
+    this.curve = Curves.easeOutExpo,
   });
-
 
   @override
   State<ScaleContainer> createState() => _ScaleContainerState();
 }
 
 class _ScaleContainerState extends State<ScaleContainer> {
-  bool animation = false;
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      setState(() {
-        animation = true;
-      });
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: widget.height,
-      width: widget.width,
+      height: widget.fatherHeight,
+      width: widget.fatherHeight,
       child: Center(
-        child: AnimatedOpacity(
-          duration: widget.duration,
-          opacity: animation ? 1.0 : 0.0,
-          child: AnimatedContainer(
-            duration: widget.duration,
-            curve: Curves.easeOutCirc,
-            width: animation ? widget.width : widget.width * 0.2,
-            height: animation ? widget.height : widget.height * 0.2,
-            decoration: BoxDecoration(
-              borderRadius: widget.borderRadius,
-              color: animation ? widget.secondColor : widget.firstColor,
+        child: Stack(
+          children: [
+            AnimatedScale(
+              scale: widget.animation ? 1 : 0.8,
+              duration: widget.duration,
+              curve: widget.curve,
+              child: AnimatedOpacity(
+                opacity: widget.animation ? 1 : 0,
+                duration: widget.duration,
+                curve: widget.curve,
+                child: widget.child,
+              ),
             ),
-            child: widget.child,
-          ),
+          ],
         ),
       ),
     );
   }
 }
-
-
