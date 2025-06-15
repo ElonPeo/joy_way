@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:joy_way/widgets/AnimatedIcons/LoadingRiveIcon.dart';
 import 'package:joy_way/widgets/AnimationContainer/MoveAndFadeInContainer.dart';
+import 'package:liquid_glass_renderer/liquid_glass_renderer.dart';
 import '../../../../config/GeneralSpecifications.dart';
 import '../../../widgets/AnimationContainer/FadeContainer.dart';
 
@@ -58,7 +59,6 @@ class _StatusAndErrorMessagesState extends State<StatusAndErrorMessages>
   // animation for successful
   bool showSuccessful = false;
   bool showSuccessfulText = false;
-  bool showSubSuccessfulText = false;
   bool hideTwoCircle = false;
   bool scaleTheFirstCircle = false;
 
@@ -124,6 +124,17 @@ class _StatusAndErrorMessagesState extends State<StatusAndErrorMessages>
             showSuccessful = true;
           });
         });
+        Future.delayed(Duration(milliseconds: 100), () {
+          setState(() {
+            showSuccessfulText = true;
+          });
+        });
+        Future.delayed(Duration(milliseconds: 1500), () {
+          setState(() {
+            showSuccessful = false;
+          });
+        });
+
         Future.delayed(Duration(milliseconds: 2000), () {
           setState(() {
             fadeInAnimation1 = false;
@@ -368,9 +379,9 @@ class _StatusAndErrorMessagesState extends State<StatusAndErrorMessages>
                                         shape: BoxShape.circle,
                                         gradient: LinearGradient(
                                           colors: [
-                                            Color.fromRGBO(56, 149, 195, 1),
-                                            Color.fromRGBO(250, 250, 250, 0.8),
-                                            Color.fromRGBO(92, 39, 161, 1),
+                                            Color.fromRGBO(118, 197, 236, 1),
+                                            Color.fromRGBO(226, 245, 255, 1),
+                                            Color.fromRGBO(166, 133, 211, 1),
                                             // Color.fromRGBO(121, 101, 193, 1),
                                             // Color.fromRGBO(159, 179, 223, 0.8),
                                             // Color.fromRGBO(0, 252, 255, 0.8),
@@ -417,44 +428,59 @@ class _StatusAndErrorMessagesState extends State<StatusAndErrorMessages>
                             begin: Alignment.topLeft,
                             end: Alignment.bottomRight,
                           ),
-                          borderRadius: BorderRadius.circular(15),
-                          border:
-                              Border.all(color: Colors.white.withOpacity(1)),
+                          borderRadius: BorderRadius.circular(24),
                         ),
-                        child: hintLogo
-                            ? Center(
-                                child: Stack(
-                                  children: [
-                                    ClipRRect(
-                                      borderRadius: BorderRadius.circular(15),
-                                      child: BackdropFilter(
-                                        filter: ImageFilter.blur(
-                                            sigmaX: 5, sigmaY: 5),
-                                        child: Container(
-                                          height: 200,
-                                          width: 100,
-                                        ),
+                        child: Stack(
+                          children: [
+                            Container(
+                              color: Colors.transparent,
+                              height: 200,
+                              width: 100,
+                              child: hintLogo
+                                  ? Center(
+                                      child: Stack(
+                                        children: [
+                                          LiquidGlassLayer(
+                                            settings: const LiquidGlassSettings(
+                                              thickness: 15,
+                                              glassColor: Color.fromRGBO(255, 255, 255, 0.1),
+                                              lightIntensity: 1.5,
+                                              blend: 50,
+                                              lightAngle: 1,
+                                            ),
+                                            child: Center(
+                                              child: LiquidGlass.inLayer(
+                                                shape: LiquidRoundedSuperellipse(borderRadius: Radius.circular(24)),
+                                                child: Container(
+                                                  width: 100,
+                                                  height:200,
+                                                  color: Color.fromRGBO(200, 200, 200, 0.1),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          Center(
+                                            child: FadeContainer(
+                                              fatherHeight: 50,
+                                              fatherWidth: 50,
+                                              animation: showLoading,
+                                              duration: Duration(milliseconds: 500),
+                                              child: LoadingRiveIcon(
+                                                fatherHeight: 50,
+                                                fatherWidth: 50,
+                                                activeFail: showWarning,
+                                                activeLoading: showTitleText,
+                                                activeSuccessful: showSuccessful,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                    ),
-                                    Center(
-                                      child: FadeContainer(
-                                        fatherHeight: 50,
-                                        fatherWidth: 50,
-                                        animation: showLoading,
-                                        duration: Duration(milliseconds: 500),
-                                        child: LoadingRiveIcon(
-                                          fatherHeight: 50,
-                                          fatherWidth: 50,
-                                          activeFail: showWarning,
-                                          activeLoading: showTitleText,
-                                          activeSuccessful: showSuccessful,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              )
-                            : SizedBox(),
+                                    )
+                                  : SizedBox(),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   MoveAndFadeInContainer(
@@ -558,9 +584,9 @@ class _StatusAndErrorMessagesState extends State<StatusAndErrorMessages>
                                   child: Text(
                                     "Loading",
                                     textAlign: TextAlign.center,
-                                    style: GoogleFonts.outfit(
+                                    style: GoogleFonts.montserrat(
                                       fontWeight: FontWeight.w700,
-                                      fontSize: 26,
+                                      fontSize: 25,
                                     ),
                                   ),
                                 ))),
@@ -585,8 +611,8 @@ class _StatusAndErrorMessagesState extends State<StatusAndErrorMessages>
                                     Text(
                                       "We are processing your request, please wait.",
                                       textAlign: TextAlign.center,
-                                      style: GoogleFonts.outfit(
-                                        fontWeight: FontWeight.w400,
+                                      style: GoogleFonts.montserrat(
+                                        fontWeight: FontWeight.w500,
                                         fontSize: 16,
                                         color: specs.bl80,
                                       ),
@@ -607,18 +633,18 @@ class _StatusAndErrorMessagesState extends State<StatusAndErrorMessages>
                             customizeTravelDistance: true,
                             start: 0,
                             end: (specs.screenHeight * 0.1 - 40)/2,
-                            animation: showErrolTitle,
+                            animation: showSuccessful || showErrolTitle,
                             duration: Duration(milliseconds: 500),
                             child: Container(
                                 height: 35,
                                 width: specs.screenWidth,
                                 child: Center(
                                   child: Text(
-                                    widget.passwordRecoveryRequestsSuccessful ? "Successful" :"Warning",
+                                    widget.passwordRecoveryRequestsSuccessful || showSuccessfulText ? "Successful" :"Warning",
                                     textAlign: TextAlign.center,
-                                    style: GoogleFonts.outfit(
+                                    style: GoogleFonts.montserrat(
                                       fontWeight: FontWeight.w700,
-                                      fontSize: 26,
+                                      fontSize: 25,
                                     ),
                                   ),
                                 ))),
@@ -627,7 +653,7 @@ class _StatusAndErrorMessagesState extends State<StatusAndErrorMessages>
                             fatherWidth: specs.screenWidth,
                             heightOfChild: 100,
                             widthOfChild: specs.screenWidth - 40,
-                            animation: showErrolSubTitle,
+                            animation:  showSuccessful || showErrolSubTitle,
                             curve: Curves.easeOutCirc,
                             customizeTravelDistance: true,
                             start: 0,
@@ -643,9 +669,9 @@ class _StatusAndErrorMessagesState extends State<StatusAndErrorMessages>
                                     Text(
                                       widget.messages,
                                       textAlign: TextAlign.center,
-                                      style: GoogleFonts.outfit(
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 16,
+                                      style: GoogleFonts.montserrat(
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 15,
                                         color: specs.bl80,
                                       ),
                                     ),
@@ -661,8 +687,12 @@ class _StatusAndErrorMessagesState extends State<StatusAndErrorMessages>
           left: 0,
             child: GestureDetector(
               onTap: (){
+                Future.delayed(Duration(milliseconds: 1000), () {
+                  setState(() {
+                    widget.onScaleLoading(false);
+                  });
+                });
                 setState(() {
-                  widget.onScaleLoading(false);
                   widget.onUnsuccessful(false);
                   widget.onPasswordRecoveryRequest(false);
                   widget.onMessages("");
@@ -676,7 +706,6 @@ class _StatusAndErrorMessagesState extends State<StatusAndErrorMessages>
                   // animation for successful
                   showSuccessful = false;
                   showSuccessfulText = false;
-                  showSubSuccessfulText = false;
                   hideTwoCircle = false;
                   scaleTheFirstCircle = false;
 
@@ -721,9 +750,9 @@ class _StatusAndErrorMessagesState extends State<StatusAndErrorMessages>
                       children: [
                         Text(
                           "Return",
-                          style: GoogleFonts.outfit(
+                          style: GoogleFonts.montserrat(
                             color: Colors.white,
-                            fontWeight: FontWeight.w500,
+                            fontWeight: FontWeight.w600,
                             fontSize: 18,
                           ),
                         ),

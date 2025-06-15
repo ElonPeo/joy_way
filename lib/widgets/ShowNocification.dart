@@ -61,10 +61,6 @@ class __AnimatedSnackBarState extends State<_AnimatedSnackBar>
     "assets/backgrounds/NotificationBG/tick.svg",
   ];
 
-
-
-
-
   double _rightPosition = -400;
   double _opacity = 1;
 

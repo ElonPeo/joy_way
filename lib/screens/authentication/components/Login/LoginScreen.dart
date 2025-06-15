@@ -44,8 +44,8 @@ class _LoginScreenState extends State<LoginScreen> {
     String email = _emailController.text.trim();
     String password = _passwordController.text;
 
-    if (auth.checkBeforeSendingSignIn(email, password)) {
-      String? errorMessage = await auth.signIn(email, password);
+    if (auth.Check_Before_Sending_SignIn(email, password)) {
+      String? errorMessage = await auth.Sign_In(email, password);
       if (errorMessage == null) {
         setState(() {
           _message = 'Congratulations you have successfully logged in!';
@@ -59,7 +59,7 @@ class _LoginScreenState extends State<LoginScreen> {
       }
     } else {
       setState(() {
-        _message = auth.validateInputSignIn(email, password);
+        _message = auth.Validate_Input_SignIn(email, password);
       });
       return false;
     }
@@ -153,9 +153,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                       fillColor: Colors.white,
                                       contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 18),
                                       hintText: "Enter your email",
-                                      hintStyle: GoogleFonts.outfit(
+                                      hintStyle: GoogleFonts.montserrat(
                                         color: Colors.grey,
-                                        fontWeight: FontWeight.w400,
+                                        fontWeight: FontWeight.w500,
                                         fontSize: 14,
                                       ),
 
@@ -222,9 +222,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                       fillColor: Colors.white,
                                       contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
                                       hintText: "Password",
-                                      hintStyle: GoogleFonts.outfit(
+                                      hintStyle: GoogleFonts.montserrat(
                                         color: Colors.grey,
-                                        fontWeight: FontWeight.w400,
+                                        fontWeight: FontWeight.w500,
                                         fontSize: 14,
                                       ),
 
@@ -294,9 +294,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                   },
                                   child: Text(
                                     "Recovery Password",
-                                    style: GoogleFonts.outfit(
+                                    style: GoogleFonts.montserrat(
                                       fontWeight: FontWeight.w400,
-                                      fontSize: 14,
+                                      fontSize: 13,
                                     ),
                                   ),
                                 ),
@@ -324,14 +324,16 @@ class _LoginScreenState extends State<LoginScreen> {
                                 curve: Curves.easeOutExpo,
                                 child: GestureDetector(
                                   onTap: () async {
+                                    FocusScope.of(context).unfocus();
                                     widget.onScaleChangedLoading(true);
                                     bool success = await _LoginIn();
                                     if (success) {
                                       await Future.delayed(const Duration(milliseconds: 3000));
+                                      widget.onMessages(_message);
                                       widget.onGotoHomePage(true);
                                     } else {
-                                      widget.onMessages(_message);
                                       await Future.delayed(const Duration(milliseconds: 3000));
+                                      widget.onMessages(_message);
                                       widget.onUnsuccessful(true);
                                     }
                                   },
@@ -352,9 +354,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                     child: Center(
                                       child: Text(
                                         "Confirm",
-                                        style: GoogleFonts.outfit(
+                                        style: GoogleFonts.montserrat(
                                           color: Colors.white,
-                                          fontWeight: FontWeight.w500,
+                                          fontWeight: FontWeight.w600,
                                           fontSize: 18,
                                         ),
                                       ),
@@ -399,9 +401,9 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         Text(
                           "Or continue with",
-                          style: GoogleFonts.outfit(
+                          style: GoogleFonts.montserrat(
                             color: specs.bl80,
-                            fontSize: 14,
+                            fontSize: 13,
                           ),
                         ),
                         Container(
@@ -435,11 +437,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         height: 50,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
-                          border: Border.all(
-                            color: Colors.white,
-                            width: 1,
-                            style: BorderStyle.solid,
-                          ),
+                          color: Colors.white,
                         ),
                         child: Center(
                           child: Image.asset(
@@ -462,8 +460,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     children: [
                       Text(
                         "Not a member? ",
-                        style: GoogleFonts.outfit(
-                          fontSize: 13,
+                        style: GoogleFonts.montserrat(
+                          fontSize: 12,
                           fontWeight: FontWeight.w400,
                         ),
                       ),
@@ -480,9 +478,9 @@ class _LoginScreenState extends State<LoginScreen> {
                         },
                         child: Text(
                           "Register now",
-                          style: GoogleFonts.outfit(
+                          style: GoogleFonts.montserrat(
                             color: specs.pantoneColor,
-                            fontSize: 13,
+                            fontSize: 12,
                             fontWeight: FontWeight.w400,
                           ),
                         ),

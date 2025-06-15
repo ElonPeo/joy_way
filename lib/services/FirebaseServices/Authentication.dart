@@ -3,24 +3,30 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 class Authentication {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  bool checkPasswordMatch(String password, String confirmPassword) {
+  bool Check_Password_Match(String password, String confirmPassword) {
     return password == confirmPassword;
   }
 
-  bool checkNullSignInInput(String email ,String password){
+  bool Check_Null_SignIn_Input(String email ,String password){
     return email.trim().isNotEmpty && password.trim().isNotEmpty;
   }
 
-  bool checkNullSignUpInput(String email ,String password, String confirmPassword){
+  bool Check_Null_SignUp_Input(String email ,String password, String confirmPassword){
     return email.trim().isNotEmpty && password.trim().isNotEmpty && confirmPassword.trim().isNotEmpty;
   }
 
-  bool checkNullResetPasswordInput(String email){
+  bool Check_Null_ResetPassword_Input(String email){
     return email.trim().isNotEmpty;
   }
 
-  bool checkValidEmail(String email) {
-    final allowedDomains = ['@gmail.com', '@hotmail.com', '@abc.com'];
+  bool Check_Valid_Password(String password) {
+    String cleaned = password.replaceAll(RegExp(r'\s+'), '');
+    return cleaned.length >= 6 && cleaned.length <= 128;
+  }
+
+
+  bool Check_Valid_Email(String email) {
+    final allowedDomains = ['@gmail.com', '@hotmail.com', '@yahoo.com', '@icloud.com'];
     for (final domain in allowedDomains) {
       if (email.toLowerCase().endsWith(domain)) {
         return true;
@@ -31,24 +37,27 @@ class Authentication {
 
 
   //------------------------------------------------------------
-  bool checkBeforeSendingSignUp(String email, String password, String confirmPassword) {
-    return checkNullSignUpInput(email, password, confirmPassword) &&
-        checkValidEmail(email) &&
-        checkPasswordMatch(password, confirmPassword);
+  bool Check_Before_Sending_SignUp(String email, String password, String confirmPassword) {
+    return Check_Null_SignUp_Input(email, password, confirmPassword) &&
+        Check_Valid_Email(email) &&
+        Check_Password_Match(password, confirmPassword);
   }
-  String validateInputSignUp(String email, String password, String confirmPassword) {
-    if(!checkNullSignUpInput(email,password,confirmPassword)){
+  String Validate_Input_SignUp(String email, String password, String confirmPassword) {
+    if(!Check_Null_SignUp_Input(email,password,confirmPassword)){
       return 'Email, Password, and Confirm Password cannot be blank.';
     }
-    if (!checkValidEmail(email)) {
-      return 'Invalid email. Only @gmail.com, @hotmail.com, @abc.com accepted.';
+    if (!Check_Valid_Email(email)) {
+      return 'Invalid email. Only @gmail.com, @hotmail.com, @yahoo.com, @icloud.com accepted.';
     }
-    if(!checkPasswordMatch(password, confirmPassword)) {
+    if (!Check_Valid_Password(password)) {
+      return 'Password must be 6–128 characters (excluding spaces).';
+    }
+    if(!Check_Password_Match(password, confirmPassword)) {
       return 'Password and Confirm password do not match.';
     }
     return "Unknown error";
   }
-  Future<String?> signUp(String email, String password) async {
+  Future<String?> Sign_Up(String email, String password) async {
     try {
       UserCredential result = await _auth.createUserWithEmailAndPassword(
         email: email,
@@ -63,19 +72,23 @@ class Authentication {
   }
 
   //-----------------------------------------------------------------------------------
-  bool checkBeforeSendingSignIn(String email, String password) {
-    return checkNullSignInInput(email, password ) && checkValidEmail(email);
+  bool Check_Before_Sending_SignIn(String email, String password) {
+    return Check_Null_SignIn_Input(email, password ) && Check_Valid_Email(email);
   }
-  String validateInputSignIn(String email, String password) {
-    if(!checkNullSignInInput(email, password)){
+  String Validate_Input_SignIn(String email, String password) {
+    if (!Check_Null_SignIn_Input(email, password)) {
       return 'Email and Password cannot be blank.';
     }
-    if (!checkValidEmail(email)) {
-      return 'Invalid email. Only @gmail.com, @hotmail.com, @abc.com accepted.';
+    if (!Check_Valid_Password(password)) {
+      return 'Password must be 6–128 characters (excluding spaces).';
     }
-    return "Unknown error";
+    if (!Check_Valid_Email(email)) {
+      return 'Invalid email. Only @gmail.com, @hotmail.com, @yahoo.com, @icloud.com accepted.';
+    }
+    return 'Validate input successful';
   }
-  Future<String?> signIn(String email, String password) async {
+
+  Future<String?> Sign_In(String email, String password) async {
     try {
       UserCredential result = await _auth.signInWithEmailAndPassword(
         email: email,
@@ -90,19 +103,19 @@ class Authentication {
   }
 
   //---------------------------------------------------------------------------------
-  bool checkBeforeSendingResetPassword(String email) {
-    return checkNullResetPasswordInput(email) && checkValidEmail(email);
+  bool Check_Before_Sending_ResetPassword(String email) {
+    return Check_Null_ResetPassword_Input(email) && Check_Valid_Email(email);
   }
-  String validateInputResetPassWord(String email) {
-    if(!checkNullResetPasswordInput(email)){
+  String Validate_Input_Reset_Password(String email) {
+    if(!Check_Null_ResetPassword_Input(email)){
       return 'Email cannot be blank.';
     }
-    if (!checkValidEmail(email)) {
-      return 'Invalid email. Only @gmail.com, @hotmail.com, @abc.com accepted.';
+    if (!Check_Valid_Email(email)) {
+      return 'Invalid email. Only @gmail.com, @hotmail.com, @yahoo.com, @icloud.com accepted.';
     }
     return "Unknown error";
   }
-  Future<String?> resetPassword(String email) async {
+  Future<String?> Reset_Password(String email) async {
     try {
       await _auth.sendPasswordResetEmail(email: email);
       return null;
@@ -115,15 +128,15 @@ class Authentication {
 
 
   //---------------------------------------
-  Future<void> signOut() async {
+  Future<void> Sign_Out() async {
     await _auth.signOut();
   }
   //---------------------------------------
-  User? getCurrentUser() {
+  User? Get_Current_User() {
     return _auth.currentUser;
   }
   //---------------------------------------
-  Future<String> checkNetwork() async {
+  Future<String> Check_Network() async {
     var connectivityResult = await Connectivity().checkConnectivity();
     if (connectivityResult == ConnectivityResult.none) {
       return "Check your network connection";
@@ -131,4 +144,7 @@ class Authentication {
       return "Good network connection";
     }
   }
+
+
+
 }

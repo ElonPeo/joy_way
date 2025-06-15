@@ -38,132 +38,57 @@ class _FoundationOfAuthState extends State<FoundationOfAuth> {
     return Scaffold(
       backgroundColor: Colors.white,
       resizeToAvoidBottomInset: false,
-      body: Container(
-        height: specs.screenHeight,
-        width: specs.screenWidth,
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              Color.fromRGBO(143, 135, 241, 0.2),
-              Color.fromRGBO(156, 204, 204, 0.2),
-              Color.fromRGBO(242, 198, 245, 0.2),
-            ],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
+      body: GestureDetector(
+        onTap: (){
+          FocusScope.of(context).unfocus();
+        },
+        child: Container(
+          height: specs.screenHeight,
+          width: specs.screenWidth,
+          decoration: BoxDecoration(
+            color: Color.fromRGBO(250, 250, 250, 1)
           ),
-        ),
-        child: Stack(children: [
-          FadeContainer(
-            fatherHeight: specs.screenHeight,
-            fatherWidth: specs.screenWidth,
-            duration: Duration(milliseconds: 200),
-            animation: showStatusAndErrorMessages,
-              child: StatusAndErrorMessages(
-                type: type,
-                scaleLoading: scaleForLoading,
-                goToHomePage: goToHomePage,
-                messages: messages,
-                passwordRecoveryRequestsSuccessful: passwordRecoveryRequestsSuccessful,
-                onPasswordRecoveryRequest: (value) {
-                  setState(() {
-                    passwordRecoveryRequestsSuccessful = value;
-                  });
-                },
-                isUnsuccessful: isUnsuccessful,
-                onScaleLoading: (value) {
-                  setState(() {
-                    scaleForLoading = value;
-                  });
-                },
-                onUnsuccessful: (value) {
-                  setState(() {
-                    isUnsuccessful = value;
-                  });
-                },
-                onMessages: (value) {
-                  setState(() {
-                    messages = value;
-                  });
-                },
-              ),
-          ),
-          if (type == 1)
-            Container(
-            height: specs.screenHeight,
-            width: specs.screenWidth,
-            padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
-            child: RegisterScreen(
-              type: type,
-              scaleForLoading: scaleForLoading,
-              messages: messages,
-              onUnsuccessful: (value) {
-                setState(() {
-                  isUnsuccessful= value;
-                });
-              },
-              onMessages: (value) {
-                setState(() {
-                  messages = value;
-                });
-              },
-              onGotoHomePage: (value) {
-                setState(() {
-                  goToHomePage = value;
-                });
-              },
-              onScaleChangedLoading: (value) {
-                setState(() {
-                  scaleForLoading = value;
-                });
-              },
-              onTypeChanged: (value) {
-                setState(() {
-                  type = value;
-                });
-              },
+          child: Stack(children: [
+            FadeContainer(
+              fatherHeight: specs.screenHeight,
+              fatherWidth: specs.screenWidth,
+              duration: Duration(milliseconds: 200),
+              animation: showStatusAndErrorMessages,
+                child: StatusAndErrorMessages(
+                  type: type,
+                  scaleLoading: scaleForLoading,
+                  goToHomePage: goToHomePage,
+                  messages: messages,
+                  passwordRecoveryRequestsSuccessful: passwordRecoveryRequestsSuccessful,
+                  onPasswordRecoveryRequest: (value) {
+                    setState(() {
+                      passwordRecoveryRequestsSuccessful = value;
+                    });
+                  },
+                  isUnsuccessful: isUnsuccessful,
+                  onScaleLoading: (value) {
+                    setState(() {
+                      scaleForLoading = value;
+                    });
+                  },
+                  onUnsuccessful: (value) {
+                    setState(() {
+                      isUnsuccessful = value;
+                    });
+                  },
+                  onMessages: (value) {
+                    setState(() {
+                      messages = value;
+                    });
+                  },
+                ),
             ),
-          )
-          else if(type == 2)
-            Container(
+            if (type == 1)
+              Container(
               height: specs.screenHeight,
               width: specs.screenWidth,
               padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
-              child: RecoveryPasswordScreen(
-                type: type,
-                scaleForLoading: scaleForLoading,
-                messages: messages,
-                onUnsuccessful: (value) {
-                  setState(() {
-                    isUnsuccessful= value;
-                  });
-                },
-                onMessages: (value) {
-                  setState(() {
-                    messages = value;
-                  });
-                },
-                onPasswordRecoveryRequest: (value) {
-                  setState(() {
-                    passwordRecoveryRequestsSuccessful = value;
-                  });
-                },
-                onScaleChangedLoading: (value) {
-                  setState(() {
-                    scaleForLoading = value;
-                  });
-                },
-                onTypeChanged: (value) {
-                  setState(() {
-                    type = value;
-                  });
-                },
-              ),
-            )
-          else Container(
-              height: specs.screenHeight,
-              width: specs.screenWidth,
-              padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
-              child: LoginScreen(
+              child: RegisterScreen(
                 type: type,
                 scaleForLoading: scaleForLoading,
                 messages: messages,
@@ -193,9 +118,81 @@ class _FoundationOfAuthState extends State<FoundationOfAuth> {
                   });
                 },
               ),
-            ),
+            )
+            else if(type == 2)
+              Container(
+                height: specs.screenHeight,
+                width: specs.screenWidth,
+                padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
+                child: RecoveryPasswordScreen(
+                  type: type,
+                  scaleForLoading: scaleForLoading,
+                  messages: messages,
+                  onUnsuccessful: (value) {
+                    setState(() {
+                      isUnsuccessful= value;
+                    });
+                  },
+                  onMessages: (value) {
+                    setState(() {
+                      messages = value;
+                    });
+                  },
+                  onPasswordRecoveryRequest: (value) {
+                    setState(() {
+                      passwordRecoveryRequestsSuccessful = value;
+                    });
+                  },
+                  onScaleChangedLoading: (value) {
+                    setState(() {
+                      scaleForLoading = value;
+                    });
+                  },
+                  onTypeChanged: (value) {
+                    setState(() {
+                      type = value;
+                    });
+                  },
+                ),
+              )
+            else Container(
+                height: specs.screenHeight,
+                width: specs.screenWidth,
+                padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
+                child: LoginScreen(
+                  type: type,
+                  scaleForLoading: scaleForLoading,
+                  messages: messages,
+                  onUnsuccessful: (value) {
+                    setState(() {
+                      isUnsuccessful= value;
+                    });
+                  },
+                  onMessages: (value) {
+                    setState(() {
+                      messages = value;
+                    });
+                  },
+                  onGotoHomePage: (value) {
+                    setState(() {
+                      goToHomePage = value;
+                    });
+                  },
+                  onScaleChangedLoading: (value) {
+                    setState(() {
+                      scaleForLoading = value;
+                    });
+                  },
+                  onTypeChanged: (value) {
+                    setState(() {
+                      type = value;
+                    });
+                  },
+                ),
+              ),
 
-        ]),
+          ]),
+        ),
       ),
     );
   }

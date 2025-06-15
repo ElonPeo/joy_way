@@ -213,8 +213,9 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                                         child: Text(
                                           "Start your adventure with JoyWay and share your route in real time, "
                                           "a friend can join you and enjoy the journey together.",
-                                          style: TextStyle(
+                                          style: GoogleFonts.montserrat(
                                             fontSize: 13,
+                                            fontWeight: FontWeight.w500,
                                             color: specs.bl80,
                                           ),
                                         ),
@@ -237,7 +238,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                                               child: Center(
                                                 child: Text(
                                                   "Start Now",
-                                                  style: TextStyle(
+                                                  style: GoogleFonts.montserrat(
                                                     color: Colors.white,
                                                     fontWeight: FontWeight.bold,
                                                   ),

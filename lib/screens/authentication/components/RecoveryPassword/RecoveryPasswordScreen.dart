@@ -40,8 +40,8 @@ class _RecoveryPasswordScreenState extends State<RecoveryPasswordScreen> {
 
   Future<bool> _Recovery() async {
     String email = _emailController.text.trim();
-    if(auth.checkBeforeSendingResetPassword(email)){
-      String? errorMessage = await auth.resetPassword(email);
+    if(auth.Check_Before_Sending_ResetPassword(email)){
+      String? errorMessage = await auth.Reset_Password(email);
       if (errorMessage == null) {
         setState(() {
           _message = 'Password recovery request sent successfully!';
@@ -55,7 +55,7 @@ class _RecoveryPasswordScreenState extends State<RecoveryPasswordScreen> {
       }
     } else{
       setState(() {
-        _message = auth.validateInputResetPassWord(email);
+        _message = auth.Validate_Input_Reset_Password(email);
       });
       return false;
     }
@@ -123,7 +123,7 @@ class _RecoveryPasswordScreenState extends State<RecoveryPasswordScreen> {
                   duration: Duration(milliseconds: 500),
                   child: Text(
                     "Recovery Password",
-                    style: GoogleFonts.outfit(
+                    style: GoogleFonts.montserrat(
                       fontWeight: FontWeight.w600,
                       fontSize: 30,
                     ),
@@ -166,9 +166,9 @@ class _RecoveryPasswordScreenState extends State<RecoveryPasswordScreen> {
                                       fillColor: Colors.white,
                                       contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 18),
                                       hintText: "Enter your email",
-                                      hintStyle: GoogleFonts.outfit(
+                                      hintStyle: GoogleFonts.montserrat(
                                         color: Colors.grey,
-                                        fontWeight: FontWeight.w400,
+                                        fontWeight: FontWeight.w500,
                                         fontSize: 14,
                                       ),
                                       enabledBorder: OutlineInputBorder(
@@ -217,6 +217,7 @@ class _RecoveryPasswordScreenState extends State<RecoveryPasswordScreen> {
                                 curve: Curves.easeOutExpo,
                                 child: GestureDetector(
                                   onTap: () async {
+                                    FocusScope.of(context).unfocus();
                                     widget.onScaleChangedLoading(true);
                                     bool success = await _Recovery();
                                     if (success) {
@@ -247,9 +248,9 @@ class _RecoveryPasswordScreenState extends State<RecoveryPasswordScreen> {
                                     child: Center(
                                       child: Text(
                                         "Send",
-                                        style: GoogleFonts.outfit(
+                                        style: GoogleFonts.montserrat(
                                           color: Colors.white,
-                                          fontWeight: FontWeight.w500,
+                                          fontWeight: FontWeight.w600,
                                           fontSize: 18,
                                         ),
                                       ),
@@ -274,8 +275,8 @@ class _RecoveryPasswordScreenState extends State<RecoveryPasswordScreen> {
                     children: [
                       Text(
                         "You are already a member? ",
-                        style: GoogleFonts.outfit(
-                          fontSize: 13,
+                        style: GoogleFonts.montserrat(
+                          fontSize: 12,
                           fontWeight: FontWeight.w400,
                         ),
                       ),
@@ -292,9 +293,9 @@ class _RecoveryPasswordScreenState extends State<RecoveryPasswordScreen> {
                         },
                         child: Text(
                           "Login now",
-                          style: GoogleFonts.outfit(
+                          style: GoogleFonts.montserrat(
                             color: specs.pantoneColor,
-                            fontSize: 13,
+                            fontSize: 12,
                             fontWeight: FontWeight.w400,
                           ),
                         ),

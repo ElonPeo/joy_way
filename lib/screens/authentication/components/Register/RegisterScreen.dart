@@ -44,8 +44,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
     String password = _passwordController.text;
     String confirmPassword = _confirmPasswordController.text;
 
-    if (auth.checkBeforeSendingSignUp(email, password, confirmPassword)) {
-      String? errorMessage = await auth.signUp(email, password);
+    if (auth.Check_Before_Sending_SignUp(email, password, confirmPassword)) {
+      String? errorMessage = await auth.Sign_Up(email, password);
 
       if (errorMessage == null) {
         setState(() {
@@ -60,7 +60,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       }
     } else {
       setState(() {
-        _message = auth.validateInputSignUp(email, password, confirmPassword);
+        _message = auth.Validate_Input_SignUp(email, password, confirmPassword);
       });
       return false;
     }
@@ -129,7 +129,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   duration: Duration(milliseconds: 500),
                   child: Text(
                     "Register",
-                    style: GoogleFonts.outfit(
+                    style: GoogleFonts.montserrat(
                       fontWeight: FontWeight.w600,
                       fontSize: 30,
                     ),
@@ -172,9 +172,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                       fillColor: Colors.white,
                                       contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 18),
                                       hintText: "Enter your email",
-                                      hintStyle: GoogleFonts.outfit(
+                                      hintStyle: GoogleFonts.montserrat(
                                         color: Colors.grey,
-                                        fontWeight: FontWeight.w400,
+                                        fontWeight: FontWeight.w500,
                                         fontSize: 14,
                                       ),
 
@@ -241,9 +241,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                       fillColor: Colors.white,
                                       contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
                                       hintText: "Password",
-                                      hintStyle: GoogleFonts.outfit(
+                                      hintStyle: GoogleFonts.montserrat(
                                         color: Colors.grey,
-                                        fontWeight: FontWeight.w400,
+                                        fontWeight: FontWeight.w500,
                                         fontSize: 14,
                                       ),
 
@@ -319,9 +319,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                       fillColor: Colors.white,
                                       contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
                                       hintText: "Confirm Password",
-                                      hintStyle: GoogleFonts.outfit(
+                                      hintStyle: GoogleFonts.montserrat(
                                         color: Colors.grey,
-                                        fontWeight: FontWeight.w400,
+                                        fontWeight: FontWeight.w500,
                                         fontSize: 14,
                                       ),
 
@@ -380,10 +380,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 curve: Curves.easeOutExpo,
                                 child: GestureDetector(
                                   onTap: () async {
+                                    FocusScope.of(context).unfocus();
                                     widget.onScaleChangedLoading(true);
                                     bool success = await _Register();
                                     if (success) {
                                       await Future.delayed(const Duration(milliseconds: 2000));
+                                      widget.onMessages(_message);
                                       widget.onGotoHomePage(true);
                                     } else {
                                       widget.onMessages(_message);
@@ -408,9 +410,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     child: Center(
                                       child: Text(
                                         "Confirm",
-                                        style: GoogleFonts.outfit(
+                                        style: GoogleFonts.montserrat(
                                           color: Colors.white,
-                                          fontWeight: FontWeight.w500,
+                                          fontWeight: FontWeight.w600,
                                           fontSize: 18,
                                         ),
                                       ),
@@ -435,8 +437,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     children: [
                       Text(
                         "You are already a member? ",
-                        style: GoogleFonts.outfit(
-                          fontSize: 13,
+                        style: GoogleFonts.montserrat(
+                          fontSize: 12,
                           fontWeight: FontWeight.w400,
                         ),
                       ),
@@ -453,9 +455,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         },
                         child: Text(
                           "Login now",
-                          style: GoogleFonts.outfit(
+                          style: GoogleFonts.montserrat(
                             color: specs.pantoneColor,
-                            fontSize: 13,
+                            fontSize: 12,
                             fontWeight: FontWeight.w400,
                           ),
                         ),
