@@ -26,13 +26,13 @@ class CustomBottomNavigationBar extends StatefulWidget {
 class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> with TickerProviderStateMixin {
   bool showBottomBar = false;
   late AnimationController _homeSlideController;
-  late AnimationController _searchSlideController;
-  late AnimationController _messageSlideController;
+  late AnimationController _journeySlideController;
+  late AnimationController _notifySlideController;
   late AnimationController _profileSlideController;
 
   late Animation<Offset> _homeSlideAnimation;
-  late Animation<Offset> _searchSlideAnimation;
-  late Animation<Offset> _messageSlideAnimation;
+  late Animation<Offset> _journeySlideAnimation;
+  late Animation<Offset> _notifySlideAnimation;
   late Animation<Offset> _profileSlideAnimation;
   @override
   void didUpdateWidget(covariant CustomBottomNavigationBar oldWidget) {
@@ -46,8 +46,8 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> w
   }
   void _startAnimation(int page) {
     _homeSlideController.reset();
-    _searchSlideController.reset();
-    _messageSlideController.reset();
+    _journeySlideController.reset();
+    _notifySlideController.reset();
     _profileSlideController.reset();
 
     switch (page) {
@@ -55,10 +55,10 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> w
         _homeSlideController.reverse();
         break;
       case 1:
-        _searchSlideController.reverse();
+        _journeySlideController.reverse();
         break;
       case 2:
-        _messageSlideController.reverse();
+        _notifySlideController.reverse();
         break;
       case 3:
         _profileSlideController.reverse();
@@ -74,7 +74,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> w
       case 1:
         return [screenWidth * 0.27,110];
       case 2:
-        return [screenWidth * 0.43,130];
+        return [screenWidth * 0.45,110];
       case 3:
         return [screenWidth - 135,110];
       default:
@@ -85,18 +85,18 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> w
   @override
   void initState() {
     super.initState();
-    _homeSlideController = AnimationController(vsync: this, duration: Duration(milliseconds: 500));
-    _searchSlideController = AnimationController(vsync: this, duration: Duration(milliseconds: 500));
-    _messageSlideController = AnimationController(vsync: this, duration: Duration(milliseconds: 500));
-    _profileSlideController = AnimationController(vsync: this, duration: Duration(milliseconds: 500));
+    _homeSlideController = AnimationController(vsync: this, duration: const Duration(milliseconds: 500));
+    _journeySlideController = AnimationController(vsync: this, duration: const Duration(milliseconds: 500));
+    _notifySlideController = AnimationController(vsync: this, duration: const Duration(milliseconds: 500));
+    _profileSlideController = AnimationController(vsync: this, duration: const Duration(milliseconds: 500));
 
-    _homeSlideAnimation = Tween<Offset>(begin: Offset(0.6, 0), end: Offset(2, 0)).animate(CurvedAnimation(parent: _homeSlideController, curve: Curves.easeOut));
-    _searchSlideAnimation = Tween<Offset>(begin: Offset(0.8, 0), end: Offset(1.2, 0)).animate(CurvedAnimation(parent: _searchSlideController, curve: Curves.easeOut));
-    _messageSlideAnimation = Tween<Offset>(begin: Offset(0.5, 0), end: Offset(0.1, 0)).animate(CurvedAnimation(parent: _messageSlideController, curve: Curves.easeOut));
-    _profileSlideAnimation = Tween<Offset>(begin: Offset(0.9, 0), end: Offset(1.2, 0)).animate(CurvedAnimation(parent: _profileSlideController, curve: Curves.easeOut));
+    _homeSlideAnimation = Tween<Offset>(begin: const Offset(0.6, 0), end: const Offset(2, 0)).animate(CurvedAnimation(parent: _homeSlideController, curve: Curves.easeOut));
+    _journeySlideAnimation = Tween<Offset>(begin: const Offset(0.5, 0), end: const Offset(0.5, 0)).animate(CurvedAnimation(parent: _journeySlideController, curve: Curves.easeOut));
+    _notifySlideAnimation = Tween<Offset>(begin: const Offset(0.62, 0), end: const Offset(0.1, 0)).animate(CurvedAnimation(parent: _notifySlideController, curve: Curves.easeOut));
+    _profileSlideAnimation = Tween<Offset>(begin: const Offset(0.8, 0), end: const Offset(1.2, 0)).animate(CurvedAnimation(parent: _profileSlideController, curve: Curves.easeOut));
 
     setState(() {
-      Future.delayed(Duration(milliseconds: 200), () {
+      Future.delayed(const Duration(milliseconds: 200), () {
         setState(() {
           showBottomBar = true;
         });
@@ -110,8 +110,8 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> w
   @override
   void dispose() {
     _homeSlideController.dispose();
-    _searchSlideController.dispose();
-    _messageSlideController.dispose();
+    _journeySlideController.dispose();
+    _notifySlideController.dispose();
     _profileSlideController.dispose();
     super.dispose();
   }
@@ -119,46 +119,17 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> w
   @override
   Widget build(BuildContext context) {
     final specs = GeneralSpecifications(context);
-    return Container(
+    return SizedBox(
       height: 100,
       width: specs.screenWidth,
         child: Stack(
           children: [
-            // LiquidGlassLayer(
-            //   settings: const LiquidGlassSettings(
-            //     thickness: 15,
-            //     glassColor: Color.fromRGBO(126, 126, 126, 0.5), // A subtle white tint
-            //     lightIntensity: 1.5,
-            //     blend: 100,
-            //   ),
-            //   child: Center(
-            //     child: LiquidGlass.inLayer(
-            //       shape: LiquidRoundedSuperellipse(borderRadius: Radius.circular(24)),
-            //       child: Container(
-            //         width: specs.screenWidth,
-            //         height:120,
-            //         color: Colors.transparent,
-            //         child: ClipRRect(
-            //           borderRadius: BorderRadius.circular(30),
-            //           child: BackdropFilter(
-            //             filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-            //             child: Container(
-            //               height: 120,
-            //               width: specs.screenWidth,
-            //             ),
-            //           ),
-            //         ),
-            //       ),
-            //     ),
-            //   ),
-            // ),
-
       TweenAnimationBuilder<double>(
               tween: Tween<double>(
                 begin: positionedAndWidth[0],
                 end: positioned(GeneralSpecifications(context).screenWidth, widget.page)[0],
               ),
-              duration: Duration(milliseconds: 1000),
+              duration: const Duration(milliseconds: 1000),
               curve: Curves.easeInOutBack,
               builder: (context, left, child) {
                 return TweenAnimationBuilder<double>(
@@ -166,7 +137,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> w
                     begin: positionedAndWidth[1],
                     end: positioned(GeneralSpecifications(context).screenWidth, widget.page)[1],
                   ),
-                  duration: Duration(milliseconds: 1000),
+                  duration: const Duration(milliseconds: 1000),
                   curve: Curves.easeInOutBack,
                   builder: (context, width, child) {
                     return Positioned(
@@ -186,45 +157,11 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> w
                             child: Container(
                               width: width,
                               height:50,
-                              color: Color.fromRGBO(200, 200, 200, 0.1),
+                              color: const Color.fromRGBO(200, 200, 200, 0.1),
                             ),
                           ),
                         ),
                       ),
-                    //   child: Container(
-                    //   height: 60,
-                    //   width: specs.screenWidth - 40,
-                    //
-                    //   child: Stack(
-                    //     children: [
-                    //       ShaderMask(
-                    //         shaderCallback: (Rect bounds) {
-                    //           return const LinearGradient(
-                    //             colors: [
-                    //               Color.fromRGBO(255, 255, 255, 1),
-                    //               Color.fromRGBO(62, 157, 110, 1),
-                    //             ],
-                    //             begin: Alignment.topLeft,
-                    //             end: Alignment.bottomRight,
-                    //           ).createShader(bounds);
-                    //         },
-                    //         blendMode: BlendMode.srcATop,
-                    //         child: Container(
-                    //           height: 50,
-                    //           width: width,
-                    //           decoration: BoxDecoration(
-                    //             borderRadius: BorderRadius.circular(30.0),
-                    //             border: Border.all(
-                    //               color: Colors.white,
-                    //               width: 1,
-                    //             ),
-                    //           ),
-                    //         ),
-                    //       ),
-                    //     ],
-                    //   ),
-                    // ),
-
                     );
                   },
                 );
@@ -233,12 +170,12 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> w
             Container(
               height: 60,
               width: specs.screenWidth,
-              padding:EdgeInsets.symmetric(horizontal: 20),
+              padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   AnimatedContainer(
-                    duration: Duration(milliseconds: 2000),
+                    duration:const Duration(milliseconds: 2000),
                     margin: EdgeInsets.only(left: widget.page == 0 ? 20 : 15),
                     curve: Curves.elasticOut,
                     width: widget.page == 0 ? 87 : 50,
@@ -249,7 +186,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> w
                         SlideTransition(
                           position: _homeSlideAnimation,
                           child: AnimatedOpacity(
-                            duration: Duration(milliseconds: 200),
+                            duration: const Duration(milliseconds: 200),
                             opacity: widget.page == 0 ? 1.0 : 0.0,
                             child: Text(
                               'Home',
@@ -262,11 +199,11 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> w
                           onTap: () {
                             widget.OnPage(0);
                           },
-                          child: Container(
+                          child: SizedBox(
                             height: 20,
                             width: 20,
                             child: Image.asset(
-                              'assets/icons/home.png',
+                              'assets/icons/bottom_navigator_bar/home.png',
                               fit: BoxFit.cover,
                             ),
                           ),
@@ -275,20 +212,20 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> w
                     ),
                   ),
                   AnimatedContainer(
-                    duration: Duration(milliseconds: 2000),
+                    duration:const Duration(milliseconds: 2000),
                     curve: Curves.elasticOut,
-                    width: widget.page == 1 ? 87 : 50,
+                    width: widget.page == 1 ? 95 : 50,
                     height: 60,
                     child: Stack(
                       alignment: Alignment.centerLeft,
                       children: [
                         SlideTransition(
-                          position: _searchSlideAnimation,
+                          position: _journeySlideAnimation,
                           child: AnimatedOpacity(
-                            duration: Duration(milliseconds: 200),
+                            duration:const Duration(milliseconds: 100),
                             opacity: widget.page == 1 ? 1.0 : 0.0,
                             child: Text(
-                              'Search',
+                              'Journey',
                               style: GoogleFonts.montserrat(color: Colors.black, fontSize: 14, fontWeight: FontWeight.w500),
                               overflow: TextOverflow.visible,
                             ),
@@ -298,30 +235,35 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> w
                           onTap: () {
                             widget.OnPage(1);
                           },
-                          child: Container(
-                            height: 30,
-                            width: 30,
-                            child: Icon(Icons.search),
+                          child: SizedBox(
+                            height: 23,
+                            width: 23,
+                            child: Image.asset(
+                              'assets/icons/bottom_navigator_bar/pin-map.png',
+                              fit: BoxFit.cover,
+                              height: 23,
+                              width: 23,
+                            ),
                           ),
                         )
                       ],
                     ),
                   ),
                   AnimatedContainer(
-                    duration: Duration(milliseconds: 2000),
+                    duration: const Duration(milliseconds: 2000),
                     curve: Curves.elasticOut,
-                    width: widget.page == 2 ? 100 : 50,
+                    width: widget.page == 2 ? 87 : 50,
                     height: 60,
                     child: Stack(
                       alignment: Alignment.centerLeft,
                       children: [
                         SlideTransition(
-                          position: _messageSlideAnimation,
+                          position: _notifySlideAnimation,
                           child: AnimatedOpacity(
-                            duration: Duration(milliseconds: 100),
+                            duration: const Duration(milliseconds: 100),
                             opacity: widget.page == 2 ? 1.0 : 0.0,
                             child: Text(
-                              'Message',
+                              'Notify',
                               style: GoogleFonts.montserrat(color: Colors.black, fontSize: 14, fontWeight: FontWeight.w500),
                               overflow: TextOverflow.visible,
                             ),
@@ -330,13 +272,12 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> w
                         GestureDetector(
                           onTap: () {
                             widget.OnPage(2);
-
                           },
-                          child: Container(
+                          child: SizedBox(
                             height: 25,
                             width: 25,
                             child: Image.asset(
-                              'assets/icons/chat.png',
+                              'assets/icons/bottom_navigator_bar/notification.png',
                               fit: BoxFit.cover,
                             ),
                           ),
@@ -345,7 +286,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> w
                     ),
                   ),
                   AnimatedContainer(
-                    duration: Duration(milliseconds: 2000),
+                    duration: const Duration(milliseconds: 2000),
                     curve: Curves.elasticOut,
                     width: widget.page == 3 ? 100 : 50,
                     height: 60,
@@ -355,7 +296,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> w
                         SlideTransition(
                           position: _profileSlideAnimation,
                           child: AnimatedOpacity(
-                            duration: Duration(milliseconds: 200),
+                            duration: const Duration(milliseconds: 200),
                             opacity: widget.page == 3 ? 1.0 : 0.0,
                             child: Text(
                               'Profile',
@@ -368,11 +309,11 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> w
                           onTap: () {
                             widget.OnPage(3);
                           },
-                          child: Container(
+                          child: SizedBox(
                             height: 25,
                             width: 25,
                             child: Image.asset(
-                              'assets/icons/profile.png',
+                              'assets/icons/bottom_navigator_bar/profile.png',
                               fit: BoxFit.cover,
                             ),
                           ),

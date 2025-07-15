@@ -23,24 +23,7 @@ class _SearchScreenState extends State<SearchScreen> {
   Timer? _debounce;
   List<Map<String, dynamic>> _searchResults = [];
 
-  void _onSearchChanged(String query) {
-    if (_debounce?.isActive ?? false) _debounce!.cancel();
-    _debounce = Timer(const Duration(milliseconds: 500), () async {
-      if (!mounted) return;
-      if (query.trim().length >= 4) {
-        final results = await SearchService().Find_Users(keyword: query.trim());
-        if (mounted) {
-          setState(() {
-            _searchResults = results;
-          });
-        }
-      } else {
-        setState(() {
-          _searchResults = [];
-        });
-      }
-    });
-  }
+
 
   void _onSearchButtonPressed() {
     FocusScope.of(context).unfocus();
@@ -48,7 +31,6 @@ class _SearchScreenState extends State<SearchScreen> {
 
   @override
   void initState() {
-
     super.initState();
   }
 
@@ -168,7 +150,7 @@ class _SearchScreenState extends State<SearchScreen> {
                             onTap: () {
                               ShowGeneralDialog.Profile_Dialog(
                                 context: context,
-                                userId: user['userId'] ?? '',
+                                otherUid: user['userId'] ?? '',
                                 userName: user['userName'] ?? '',
                                 fullName: user['fullName'] ?? '',
                                 story: user['story'] ?? '',

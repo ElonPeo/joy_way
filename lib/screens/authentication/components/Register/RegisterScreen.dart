@@ -124,14 +124,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 SizedBox(),
                 FadeContainer(
                   animation: animation[0],
-                  fatherHeight: 40,
+                  fatherHeight: 45,
                   fatherWidth: specs.screenWidth,
                   duration: Duration(milliseconds: 500),
                   child: Text(
                     "Register",
-                    style: GoogleFonts.montserrat(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 30,
+                    style: GoogleFonts.outfit(
+                      fontWeight: FontWeight.w500,
+                      fontSize: 32,
                     ),
                   ),
                 ),
@@ -172,10 +172,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                       fillColor: Colors.white,
                                       contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 18),
                                       hintText: "Enter your email",
-                                      hintStyle: GoogleFonts.montserrat(
+                                      hintStyle: GoogleFonts.outfit(
                                         color: Colors.grey,
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 14,
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 15,
                                       ),
 
                                       enabledBorder: OutlineInputBorder(
@@ -241,10 +241,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                       fillColor: Colors.white,
                                       contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
                                       hintText: "Password",
-                                      hintStyle: GoogleFonts.montserrat(
+                                      hintStyle: GoogleFonts.outfit(
                                         color: Colors.grey,
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 14,
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 15,
                                       ),
 
                                       enabledBorder: OutlineInputBorder(
@@ -319,10 +319,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                       fillColor: Colors.white,
                                       contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
                                       hintText: "Confirm Password",
-                                      hintStyle: GoogleFonts.montserrat(
+                                      hintStyle: GoogleFonts.outfit(
                                         color: Colors.grey,
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 14,
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 15,
                                       ),
 
                                       enabledBorder: OutlineInputBorder(
@@ -410,7 +410,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     child: Center(
                                       child: Text(
                                         "Confirm",
-                                        style: GoogleFonts.montserrat(
+                                        style: GoogleFonts.outfit(
                                           color: Colors.white,
                                           fontWeight: FontWeight.w600,
                                           fontSize: 18,
@@ -437,7 +437,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     children: [
                       Text(
                         "You are already a member? ",
-                        style: GoogleFonts.montserrat(
+                        style: GoogleFonts.outfit(
                           fontSize: 12,
                           fontWeight: FontWeight.w400,
                         ),
@@ -455,7 +455,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         },
                         child: Text(
                           "Login now",
-                          style: GoogleFonts.montserrat(
+                          style: GoogleFonts.outfit (
                             color: specs.pantoneColor,
                             fontSize: 12,
                             fontWeight: FontWeight.w400,

@@ -62,7 +62,6 @@ class _MessageRoomState extends State<MessageRoom> {
       color: Colors.white,
       child: Stack(
         children: [
-          // Message list
           conversationId == null
               ? Center(child: CircularProgressIndicator())
               : Padding(

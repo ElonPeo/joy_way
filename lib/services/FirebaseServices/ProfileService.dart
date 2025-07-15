@@ -90,6 +90,7 @@ class ProfileService {
       if (currentAddress != null && currentAddress.isNotEmpty) {
         userData['currentAddress'] = currentAddress;
       }
+
       await FirebaseFirestore.instance.collection('users').doc(uid).set(userData);
       return null;
     } catch (e){
@@ -258,11 +259,64 @@ class ProfileService {
   }
 
 
+  Future<Map<String, dynamic>?> Get_Other_User_Information_by_uid(String uid) async {
+    try {
+      DocumentSnapshot doc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(uid)
+          .get();
+
+      if (!doc.exists) return null;
+
+      final data = doc.data() as Map<String, dynamic>;
+
+      return {
+        'userName': data['userName'],
+        'fullName': data['fullName'],
+        'sex': data['sex'],
+        'story': data['story'],
+        'phoneNumber': data['phoneNumber'],
+        'dateOfBirth': data['dateOfBirth'] != null
+            ? (data['dateOfBirth'] as Timestamp).toDate()
+            : null,
+        'placeOfBirth': data['placeOfBirth'],
+        'currentAddress': data['currentAddress'],
+      };
+    } catch (e) {
+      print('Error getting user info: $e');
+      return null;
+    }
+  }
 
 
-
-
-
+  // Future<List<Map<String, dynamic>>> Get_Multiple_Users_Information_by_uids(List<String> uids) async {
+  //   List<Map<String, dynamic>> usersInfo = [];
+  //   try {
+  //     final futures = uids.map((uid) => FirebaseFirestore.instance.collection('users').doc(uid).get()).toList();
+  //     final docs = await Future.wait(futures);
+  //     for (var doc in docs) {
+  //       if (!doc.exists) continue;
+  //       final data = doc.data() as Map<String, dynamic>;
+  //       usersInfo.add({
+  //         'uid': doc.id,
+  //         'userName': data['userName'],
+  //         'fullName': data['fullName'],
+  //         'sex': data['sex'],
+  //         'story': data['story'],
+  //         'phoneNumber': data['phoneNumber'],
+  //         'dateOfBirth': data['dateOfBirth'] != null
+  //             ? (data['dateOfBirth'] as Timestamp).toDate()
+  //             : null,
+  //         'placeOfBirth': data['placeOfBirth'],
+  //         'currentAddress': data['currentAddress'],
+  //       });
+  //     }
+  //   } catch (e) {
+  //     print('Error getting multiple user infos: $e');
+  //   }
+  //
+  //   return usersInfo;
+  // }
 
 
 }

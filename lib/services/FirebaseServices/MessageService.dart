@@ -54,6 +54,64 @@ class MessageService {
         .snapshots();
   }
 
+  Future<List<Map<String, dynamic>>> getMessagedUsersWithLastMessage(String currentUserId) async {
+    final snapshot = await FirebaseFirestore.instance
+        .collection('conversations')
+        .where('userIds', arrayContains: currentUserId)
+        .get();
+
+    List<Map<String, dynamic>> result = [];
+
+    for (var doc in snapshot.docs) {
+      List<dynamic> userIds = doc['userIds'];
+      List<String> otherUsers = userIds.where((uid) => uid != currentUserId).cast<String>().toList();
+
+      if (otherUsers.isNotEmpty) {
+        String otherUserId = otherUsers.first;
+
+        // 🔍 Lấy thông tin đối tác
+        final otherUserDoc = await FirebaseFirestore.instance
+            .collection('users')
+            .doc(otherUserId)
+            .get();
+
+        if (!otherUserDoc.exists) continue;
+
+        final otherUserData = otherUserDoc.data()!;
+        final fullName = otherUserData['fullName'] ?? '';
+        final userName = (otherUserData['userName'] != null && otherUserData['userName'].isNotEmpty)
+            ? otherUserData['userName']
+            : '';
+
+        // 💬 Lấy tin nhắn cuối cùng
+        final messagesSnapshot = await FirebaseFirestore.instance
+            .collection('conversations')
+            .doc(doc.id)
+            .collection('messages')
+            .orderBy('timestamp', descending: true)
+            .limit(1)
+            .get();
+
+        String lastMessage = '';
+        if (messagesSnapshot.docs.isNotEmpty) {
+          final lastMsgDoc = messagesSnapshot.docs.first;
+          lastMessage = lastMsgDoc['text'] ?? '';
+        }
+
+        result.add({
+          'conversationId': doc.id,
+          'otherUserId': otherUserId,
+          'fullName': fullName,
+          'userName': userName,
+          'lastMessage': lastMessage,
+        });
+      }
+    }
+
+    return result;
+  }
+
+
 }
 
 

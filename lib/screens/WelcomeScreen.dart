@@ -6,7 +6,6 @@ import '../config/GeneralSpecifications.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../widgets/AnimationContainer/FadeContainer.dart';
-import 'authentication/components/FoundationOfAuth.dart';
 
 class WelcomeScreen extends StatefulWidget {
   @override

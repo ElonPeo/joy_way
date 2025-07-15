@@ -68,9 +68,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
 
   List<String> assetsIcons = [
-    "assets/icons/google.png",
-    "assets/icons/facebook.png",
-    "assets/icons/apple.png",
+    "assets/icons/account_link/google.png",
+    "assets/icons/account_link/facebook.png",
+    "assets/icons/account_link/apple.png",
   ];
   List<bool> animation = List<bool>.filled(10, false);
   bool _obscurePass = true;
@@ -153,10 +153,10 @@ class _LoginScreenState extends State<LoginScreen> {
                                       fillColor: Colors.white,
                                       contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 18),
                                       hintText: "Enter your email",
-                                      hintStyle: GoogleFonts.montserrat(
+                                      hintStyle: GoogleFonts.outfit(
                                         color: Colors.grey,
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 14,
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 15,
                                       ),
 
                                       enabledBorder: OutlineInputBorder(
@@ -222,10 +222,10 @@ class _LoginScreenState extends State<LoginScreen> {
                                       fillColor: Colors.white,
                                       contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
                                       hintText: "Password",
-                                      hintStyle: GoogleFonts.montserrat(
+                                      hintStyle: GoogleFonts.outfit(
                                         color: Colors.grey,
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 14,
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 15,
                                       ),
 
                                       enabledBorder: OutlineInputBorder(
@@ -294,8 +294,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                   },
                                   child: Text(
                                     "Recovery Password",
-                                    style: GoogleFonts.montserrat(
-                                      fontWeight: FontWeight.w400,
+                                    style: GoogleFonts.outfit(
+                                      fontWeight: FontWeight.w500,
                                       fontSize: 13,
                                     ),
                                   ),
@@ -354,7 +354,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     child: Center(
                                       child: Text(
                                         "Confirm",
-                                        style: GoogleFonts.montserrat(
+                                        style: GoogleFonts.outfit(
                                           color: Colors.white,
                                           fontWeight: FontWeight.w600,
                                           fontSize: 18,
@@ -385,6 +385,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     width: specs.screenWidth - 40,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
                       children: [
                         Container(
                           width: 80,
@@ -401,7 +402,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         Text(
                           "Or continue with",
-                          style: GoogleFonts.montserrat(
+                          style: GoogleFonts.outfit(
                             color: specs.bl80,
                             fontSize: 13,
                           ),
@@ -460,7 +461,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     children: [
                       Text(
                         "Not a member? ",
-                        style: GoogleFonts.montserrat(
+                        style: GoogleFonts.outfit(
                           fontSize: 12,
                           fontWeight: FontWeight.w400,
                         ),
@@ -478,7 +479,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         },
                         child: Text(
                           "Register now",
-                          style: GoogleFonts.montserrat(
+                          style: GoogleFonts.outfit(
                             color: specs.pantoneColor,
                             fontSize: 12,
                             fontWeight: FontWeight.w400,

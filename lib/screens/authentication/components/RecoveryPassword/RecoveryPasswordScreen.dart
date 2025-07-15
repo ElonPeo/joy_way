@@ -68,9 +68,6 @@ class _RecoveryPasswordScreenState extends State<RecoveryPasswordScreen> {
     "assets/icons/apple.png",
   ];
   List<bool> animation = List<bool>.filled(10, false);
-  bool _obscurePass1 = true;
-  bool _obscurePass2 = true;
-
   void setListFalse  (List<bool> list) {
     for(int i = 0 ; i < list.length; i++ )
     {
@@ -123,9 +120,9 @@ class _RecoveryPasswordScreenState extends State<RecoveryPasswordScreen> {
                   duration: Duration(milliseconds: 500),
                   child: Text(
                     "Recovery Password",
-                    style: GoogleFonts.montserrat(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 30,
+                    style: GoogleFonts.outfit(
+                      fontWeight: FontWeight.w500,
+                      fontSize: 32,
                     ),
                   ),
                 ),
@@ -166,10 +163,10 @@ class _RecoveryPasswordScreenState extends State<RecoveryPasswordScreen> {
                                       fillColor: Colors.white,
                                       contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 18),
                                       hintText: "Enter your email",
-                                      hintStyle: GoogleFonts.montserrat(
+                                      hintStyle: GoogleFonts.outfit(
                                         color: Colors.grey,
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 14,
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 15,
                                       ),
                                       enabledBorder: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(12),
@@ -248,7 +245,7 @@ class _RecoveryPasswordScreenState extends State<RecoveryPasswordScreen> {
                                     child: Center(
                                       child: Text(
                                         "Send",
-                                        style: GoogleFonts.montserrat(
+                                        style: GoogleFonts.outfit(
                                           color: Colors.white,
                                           fontWeight: FontWeight.w600,
                                           fontSize: 18,
@@ -275,7 +272,7 @@ class _RecoveryPasswordScreenState extends State<RecoveryPasswordScreen> {
                     children: [
                       Text(
                         "You are already a member? ",
-                        style: GoogleFonts.montserrat(
+                        style: GoogleFonts.outfit(
                           fontSize: 12,
                           fontWeight: FontWeight.w400,
                         ),
@@ -293,7 +290,7 @@ class _RecoveryPasswordScreenState extends State<RecoveryPasswordScreen> {
                         },
                         child: Text(
                           "Login now",
-                          style: GoogleFonts.montserrat(
+                          style: GoogleFonts.outfit(
                             color: specs.pantoneColor,
                             fontSize: 12,
                             fontWeight: FontWeight.w400,

@@ -41,7 +41,10 @@ dependencies:
   cloud_firestore: ^5.6.8
   connectivity_plus: ^6.1.4
   intl: ^0.20.2
-  liquid_glass_renderer: ^0.1.1-dev.5
+  vietnam_provinces: ^1.0.2
+  liquid_glass_renderer: ^0.1.1-dev.9
+  rxdart: ^0.28.0
+  
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
 
@@ -70,6 +73,11 @@ flutter:
   assets:
     - assets/
     - assets/icons/
+    - assets/icons/status/
+    - assets/icons/account_link/
+    - assets/icons/bottom_navigator_bar/
+    - assets/icons/vehicle_type/
+    - assets/icons/message/
     - assets/backgrounds/
     - assets/backgrounds/authenBG/
     - assets/backgrounds/NotificationBG/

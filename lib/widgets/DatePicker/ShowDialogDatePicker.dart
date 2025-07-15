@@ -1,5 +1,4 @@
 import 'dart:ui';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -8,11 +7,13 @@ import '../../config/GeneralSpecifications.dart';
 class ShowDialogDatePicker extends StatefulWidget {
   final DateTime? dateTime;
   final String title;
+  final bool isDate;
   final Function(DateTime)? onDateTimeChanged;
 
   const ShowDialogDatePicker({
     super.key,
     required this.dateTime,
+    this.isDate = true,
     this.title = "Date Picker",
     required this.onDateTimeChanged,
   });
@@ -23,6 +24,13 @@ class ShowDialogDatePicker extends StatefulWidget {
 
 class _ShowDialogDatePickerState extends State<ShowDialogDatePicker> {
   late DateTime selectedDate;
+
+  @override
+  void initState() {
+    super.initState();
+    selectedDate = widget.dateTime ?? DateTime.now();
+  }
+
   @override
   Widget build(BuildContext context) {
     final specs = GeneralSpecifications(context);
@@ -36,16 +44,15 @@ class _ShowDialogDatePickerState extends State<ShowDialogDatePicker> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             GestureDetector(
-              onTap: (){
+              onTap: () {
                 Navigator.pop(context);
               },
               child: Container(
-                height: specs.screenHeight * 0.6 ,
+                height: specs.screenHeight * 0.6,
                 width: specs.screenWidth,
                 color: Colors.transparent,
               ),
             ),
-
             Container(
               height: specs.screenHeight * 0.4 - 20,
               width: specs.screenWidth - 20,
@@ -84,7 +91,10 @@ class _ShowDialogDatePickerState extends State<ShowDialogDatePicker> {
                               ),
                             ],
                             color: Color.fromRGBO(44, 122, 84, 1),
-                            borderRadius: BorderRadius.only(topLeft:  Radius.circular(30), topRight:Radius.circular(30),),
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(30),
+                              topRight: Radius.circular(30),
+                            ),
                           ),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -134,11 +144,13 @@ class _ShowDialogDatePickerState extends State<ShowDialogDatePicker> {
                           width: specs.screenWidth,
                           decoration: BoxDecoration(
                             color: Color.fromRGBO(240, 240, 240, 0.7),
-
                           ),
-                          child:  CupertinoDatePicker(
-                            mode: CupertinoDatePickerMode.date,
-                            initialDateTime: widget.dateTime,
+                          child: CupertinoDatePicker(
+                            mode: widget.isDate
+                                ? CupertinoDatePickerMode.date
+                                : CupertinoDatePickerMode.time,
+                            initialDateTime: widget.dateTime ?? DateTime.now(),
+                            use24hFormat: true,
                             onDateTimeChanged: (DateTime newDate) {
                               setState(() {
                                 selectedDate = newDate;
@@ -153,8 +165,9 @@ class _ShowDialogDatePickerState extends State<ShowDialogDatePicker> {
                           decoration: BoxDecoration(
                             color: Color.fromRGBO(210, 210, 210, 0.7),
                             borderRadius: BorderRadius.only(
-                            bottomLeft: Radius.circular(30),
-                            bottomRight: Radius.circular(30),),
+                              bottomLeft: Radius.circular(30),
+                              bottomRight: Radius.circular(30),
+                            ),
                           ),
                         ),
                       ],

@@ -43,7 +43,7 @@ class _ProfileEditFormState extends State<ProfileEditForm>
     super.initState();
     _rotationController = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 300),
+      duration: const Duration(milliseconds: 300),
       lowerBound: 0,
       upperBound: 1,
     );
@@ -60,7 +60,7 @@ class _ProfileEditFormState extends State<ProfileEditForm>
       isTapGender = !isTapGender;
 
       if (isTapGender) {
-        Future.delayed(Duration(milliseconds: 400), () {
+        Future.delayed(const Duration(milliseconds: 400), () {
           if (isTapGender) {
             setState(() {
               showGenderType = true;
@@ -79,7 +79,6 @@ class _ProfileEditFormState extends State<ProfileEditForm>
       List<dynamic>? info =
           await ProfileService().Get_User_Information(user.uid);
       if (info != null) {
-        print("User info: $info");
         setState(() {
           _userName.text = (info[0]?.toString().replaceFirst('@', '')) ?? '';
           _fullName.text = (info[1]?.toString()) ?? '';
@@ -143,7 +142,7 @@ class _ProfileEditFormState extends State<ProfileEditForm>
                         Container(
                           height: 50,
                           width: specs.screenWidth,
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                             borderRadius: BorderRadius.only(
                               topRight: Radius.circular(30),
                               topLeft: Radius.circular(30),
@@ -211,8 +210,6 @@ class _ProfileEditFormState extends State<ProfileEditForm>
                                           statusNotifier.value = true;
                                           message.value = "Update successfully";
                                         } else {
-                                          print("loi");
-                                          print(status);
                                           await Future.delayed(const Duration(milliseconds: 2000));
                                           statusNotifier.value = null;
                                           message.value = status;
@@ -240,7 +237,7 @@ class _ProfileEditFormState extends State<ProfileEditForm>
                           width: specs.screenWidth,
                           color: Colors.white,
                           child: ListView(
-                            padding: EdgeInsets.all(0),
+                            padding: const EdgeInsets.all(0),
                             children: [
                               Container(
                                 height: specs.screenHeight * 0.15 + 60,
@@ -267,7 +264,7 @@ class _ProfileEditFormState extends State<ProfileEditForm>
                                                     width: 100,
                                                     height: 100,
                                                     color: specs.bl240,
-                                                    child: Icon(
+                                                    child: const Icon(
                                                       Icons.person,
                                                       size: 60,
                                                     ),
@@ -294,7 +291,7 @@ class _ProfileEditFormState extends State<ProfileEditForm>
                               ),
                               Container(
                                   height: 50,
-                                  padding: EdgeInsets.only(left: 20, right: 20),
+                                  padding: const EdgeInsets.only(left: 20, right: 20),
                                   decoration: BoxDecoration(
                                     border: Border(
                                       top: BorderSide(
@@ -335,7 +332,7 @@ class _ProfileEditFormState extends State<ProfileEditForm>
                                             ),
                                             decoration: InputDecoration(
                                               contentPadding:
-                                                  EdgeInsets.symmetric(vertical: 10),
+                                              const EdgeInsets.symmetric(vertical: 10),
                                               hintText: _fullName.text.isEmpty
                                                   ? 'Enter your name'
                                                   : _fullName.text,
@@ -352,7 +349,7 @@ class _ProfileEditFormState extends State<ProfileEditForm>
                                   )),
                               Container(
                                   height: 50,
-                                  padding: EdgeInsets.only(left: 20, right: 20),
+                                  padding: const EdgeInsets.only(left: 20, right: 20),
                                   decoration: BoxDecoration(
                                     border: Border(
                                       top: BorderSide(
@@ -364,7 +361,7 @@ class _ProfileEditFormState extends State<ProfileEditForm>
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Container(
+                                      SizedBox(
                                         width: specs.screenWidth * 0.2,
                                         child: Column(
                                           mainAxisAlignment: MainAxisAlignment.center,
@@ -382,7 +379,7 @@ class _ProfileEditFormState extends State<ProfileEditForm>
                                           ],
                                         ),
                                       ),
-                                      Container(
+                                      SizedBox(
                                         width: specs.screenWidth * 0.7 - 20,
                                         child: Row(
                                           children: [
@@ -393,7 +390,7 @@ class _ProfileEditFormState extends State<ProfileEditForm>
                                                 color: specs.bl200,
                                               ),
                                             ),
-                                            Container(
+                                            SizedBox(
                                               width: specs.screenWidth * 0.6 - 20,
                                               child: TextField(
                                                 controller: _userName,
@@ -405,7 +402,7 @@ class _ProfileEditFormState extends State<ProfileEditForm>
                                                 ),
                                                 decoration: InputDecoration(
                                                   contentPadding:
-                                                      EdgeInsets.symmetric(
+                                                  const EdgeInsets.symmetric(
                                                           vertical: 10),
                                                   hintText: _userName.text.isEmpty
                                                       ? 'Enter your user name'
@@ -426,9 +423,9 @@ class _ProfileEditFormState extends State<ProfileEditForm>
                                     ],
                                   )),
                               AnimatedContainer(
-                                  duration: Duration(milliseconds: 300),
+                                  duration: const Duration(milliseconds: 300),
                                   height: isTapGender ? 200 : 50,
-                                  padding: EdgeInsets.only(left: 20, right: 20),
+                                  padding: const EdgeInsets.only(left: 20, right: 20),
                                   decoration: BoxDecoration(
                                     border: Border(
                                       top: BorderSide(
@@ -443,7 +440,7 @@ class _ProfileEditFormState extends State<ProfileEditForm>
                                     children: [
                                       Container(
                                         width: specs.screenWidth * 0.2,
-                                        padding: EdgeInsets.only(top: 15),
+                                        padding: const EdgeInsets.only(top: 15),
                                         child: Text(
                                           'Sex',
                                           style: GoogleFonts.montserrat(
@@ -453,7 +450,7 @@ class _ProfileEditFormState extends State<ProfileEditForm>
                                         ),
                                       ),
                                       AnimatedContainer(
-                                        duration: Duration(milliseconds: 300),
+                                        duration: const Duration(milliseconds: 300),
                                         width: specs.screenWidth * 0.7 - 20,
                                         height: isTapGender ? 200 : 50,
                                         child: Stack(
@@ -494,7 +491,7 @@ class _ProfileEditFormState extends State<ProfileEditForm>
                                                             child: child,
                                                           );
                                                         },
-                                                        child: Icon(
+                                                        child: const Icon(
                                                           Icons
                                                               .arrow_forward_ios_rounded,
                                                           size: 17,
@@ -520,7 +517,7 @@ class _ProfileEditFormState extends State<ProfileEditForm>
                                                           20,
                                                       height: 50,
                                                       color: specs.bl240,
-                                                      child: Center(
+                                                      child: const Center(
                                                         child: Text(
                                                           'Male',
                                                         ),
@@ -538,7 +535,7 @@ class _ProfileEditFormState extends State<ProfileEditForm>
                                                           20,
                                                       height: 50,
                                                       color: specs.bl240,
-                                                      child: Center(
+                                                      child: const  Center(
                                                         child: Text(
                                                           'Female',
                                                         ),
@@ -556,7 +553,7 @@ class _ProfileEditFormState extends State<ProfileEditForm>
                                                           20,
                                                       height: 50,
                                                       color: specs.bl240,
-                                                      child: Center(
+                                                      child: const Center(
                                                         child: Text(
                                                           'LGBT',
                                                         ),
@@ -572,7 +569,7 @@ class _ProfileEditFormState extends State<ProfileEditForm>
                                   )),
                               Container(
                                   height: 100,
-                                  padding: EdgeInsets.only(left: 20, right: 20),
+                                  padding: const EdgeInsets.only(left: 20, right: 20),
                                   decoration: BoxDecoration(
                                     border: Border(
                                       top: BorderSide(
@@ -586,7 +583,7 @@ class _ProfileEditFormState extends State<ProfileEditForm>
                                     children: [
                                       Container(
                                         width: specs.screenWidth * 0.2,
-                                        padding: EdgeInsets.only(top: 12),
+                                        padding: const EdgeInsets.only(top: 12),
                                         child: Column(
                                           mainAxisAlignment: MainAxisAlignment.start,
                                           crossAxisAlignment:
@@ -616,7 +613,7 @@ class _ProfileEditFormState extends State<ProfileEditForm>
                                           ),
                                           textInputAction: TextInputAction.send,
                                           decoration: InputDecoration(
-                                            contentPadding: EdgeInsets.only(top: 10),
+                                            contentPadding: const EdgeInsets.only(top: 10),
                                             hintText: _story.text.isEmpty
                                                 ? 'Share your story'
                                                 : _story.text,
@@ -634,7 +631,7 @@ class _ProfileEditFormState extends State<ProfileEditForm>
                                   )),
                               Container(
                                   height: 50,
-                                  padding: EdgeInsets.only(left: 20, right: 20),
+                                  padding: const EdgeInsets.only(left: 20, right: 20),
                                   decoration: BoxDecoration(
                                     border: Border(
                                       top: BorderSide(
@@ -695,7 +692,7 @@ class _ProfileEditFormState extends State<ProfileEditForm>
                                                   fontSize: 13
                                                 ),
                                               ),
-                                              Icon(
+                                              const Icon(
                                                 Icons.arrow_forward_ios_rounded,
                                                 size: 17,
                                                 color: Colors.black,
@@ -708,7 +705,7 @@ class _ProfileEditFormState extends State<ProfileEditForm>
                                   )),
                               Container(
                                   height: 50,
-                                  padding: EdgeInsets.only(left: 20, right: 20),
+                                  padding: const EdgeInsets.only(left: 20, right: 20),
                                   decoration: BoxDecoration(
                                     border: Border(
                                       top: BorderSide(
@@ -749,7 +746,7 @@ class _ProfileEditFormState extends State<ProfileEditForm>
                                   )),
                               Container(
                                   height: 50,
-                                  padding: EdgeInsets.only(left: 20, right: 20),
+                                  padding: const EdgeInsets.only(left: 20, right: 20),
                                   decoration: BoxDecoration(
                                     border: Border(
                                       top: BorderSide(
@@ -791,7 +788,7 @@ class _ProfileEditFormState extends State<ProfileEditForm>
                                           keyboardType: TextInputType.number,
                                           decoration: InputDecoration(
                                             contentPadding:
-                                                EdgeInsets.symmetric(vertical: 10),
+                                            const EdgeInsets.symmetric(vertical: 10),
                                             hintText: _phoneNumber.text.isEmpty
                                                 ? 'Setup phone number'
                                                 : _phoneNumber.text,
@@ -809,7 +806,7 @@ class _ProfileEditFormState extends State<ProfileEditForm>
                                   )),
                               Container(
                                   height: 50,
-                                  padding: EdgeInsets.only(left: 20, right: 20),
+                                  padding: const EdgeInsets.only(left: 20, right: 20),
                                   decoration: BoxDecoration(
                                     border: Border(
                                       top: BorderSide(
@@ -850,7 +847,7 @@ class _ProfileEditFormState extends State<ProfileEditForm>
                                           maxLength: 50,
                                           decoration: InputDecoration(
                                             contentPadding:
-                                                EdgeInsets.symmetric(vertical: 10),
+                                            const EdgeInsets.symmetric(vertical: 10),
                                             hintText: _placeOfBirth.text.isEmpty
                                                 ? 'Add place date of birth'
                                                 : _placeOfBirth.text,
@@ -868,7 +865,7 @@ class _ProfileEditFormState extends State<ProfileEditForm>
                                   )),
                               Container(
                                   height: 50,
-                                  padding: EdgeInsets.only(left: 20, right: 20),
+                                  padding: const EdgeInsets.only(left: 20, right: 20),
                                   decoration: BoxDecoration(
                                     border: Border(
                                       top: BorderSide(
@@ -909,7 +906,7 @@ class _ProfileEditFormState extends State<ProfileEditForm>
                                           ),
                                           decoration: InputDecoration(
                                             contentPadding:
-                                                EdgeInsets.symmetric(vertical: 10),
+                                            const EdgeInsets.symmetric(vertical: 10),
                                             hintText: _currentAddress.text.isEmpty
                                                 ? 'Fill in where you currently live'
                                                 : _currentAddress.text,

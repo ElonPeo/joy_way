@@ -2,14 +2,17 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:joy_way/screens/HomeScreen/components/profile/ProfileEditForm.dart';
+import 'package:joy_way/services/FirebaseServices/FriendsService.dart';
 import 'package:joy_way/widgets/ShowGeneralDialog.dart';
 
 import '../../../../config/GeneralSpecifications.dart';
-import '../../../../services/FirebaseServices/ProfileService.dart';
+import '../../../../services/DataProcessing/TimeProcessing.dart';
+import '../../../../services/FirebaseServices/PostService.dart';
+import '../home/components/Post.dart';
 
 class ProfileScreen extends StatefulWidget {
   final bool isAuth;
-  final String? uid;
+  final String? otherUid;
   final String? userName;
   final String? fullName;
   final String? story;
@@ -22,7 +25,7 @@ class ProfileScreen extends StatefulWidget {
   const ProfileScreen({
     super.key,
     required this.isAuth,
-    this.uid ,
+    this.otherUid ,
     required this.userName,
     required this.fullName,
     required this.story,
@@ -50,9 +53,30 @@ class _ProfileScreenState extends State<ProfileScreen> {
   late GeneralSpecifications specs;
 
 
+  List<Map<String, dynamic>> _posts = [];
+  bool _isLoading = true;
+
+  void loadPosts() async {
+    final currentUser = FirebaseAuth.instance.currentUser;
+    if (currentUser == null) return;
+    final userId;
+    if (widget.isAuth){
+      userId = currentUser.uid;
+    } else {
+      userId = widget.otherUid;
+    }
+    final data = await PostService().getPostsByOwnerId(userId);
+    setState(() {
+      _posts = data;
+      _isLoading = false;
+    });
+  }
+
+
   @override
   void initState() {
     super.initState();
+    loadPosts();
     _scrollController = ScrollController();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       setState(() {
@@ -105,7 +129,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final user = FirebaseAuth.instance.currentUser;
     final specs = GeneralSpecifications(context);
     return Scaffold(
       body: Stack(
@@ -124,7 +147,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   background: Container(
                     height: specs.screenHeight * 0.11 - 40,
                     width: specs.screenWidth,
-                    padding: EdgeInsets.symmetric(horizontal: 10),
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -140,11 +163,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               onTap: () {
                                 ShowGeneralDialog.General_Dialog(
                                     context: context,
-                                    beginOffset: Offset(0, 1),
+                                    beginOffset: const Offset(0, 1),
                                     child: ProfileEditForm());
                               },
                               child: Container(
-                                padding: EdgeInsets.symmetric(
+                                padding: const EdgeInsets.symmetric(
                                     horizontal: 15, vertical: 5),
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(50),
@@ -152,7 +175,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 ),
                                 child: Text(
                                   "Edit profile",
-                                  style: GoogleFonts.montserrat(
+                                  style: GoogleFonts.outfit(
                                       fontWeight: FontWeight.w600,
                                       fontSize: 13,
                                     color: Colors.white
@@ -165,10 +188,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
                                     GestureDetector(
-                                      onTap: () {
+                                      onTap: () async {
+                                        print("is tap make friend");
+                                        final friendsService = FriendsService();
+                                        final  result = await friendsService.sendFriendRequest(
+                                          receiverId: widget.otherUid ?? '',
+                                        );
+                                        if (result == null) {
+                                          ScaffoldMessenger.of(context).showSnackBar(
+                                            SnackBar(content: Text('Đã gửi lời mời kết bạn')),
+                                          );
+                                        } else {
+                                          ScaffoldMessenger.of(context).showSnackBar(
+                                            SnackBar(content: Text('Lỗi: $result')),
+                                          );
+                                        }
                                       },
                                       child: Container(
-                                        padding: EdgeInsets.symmetric(
+                                        padding: const EdgeInsets.symmetric(
                                             horizontal: 15, vertical: 5),
                                         decoration: BoxDecoration(
                                             borderRadius: BorderRadius.circular(50),
@@ -176,7 +213,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         ),
                                         child: Text(
                                           "Make friend",
-                                          style: GoogleFonts.montserrat(
+                                          style: GoogleFonts.outfit(
                                               fontWeight: FontWeight.w600,
                                               fontSize: 13,
                                               color: Colors.white
@@ -184,17 +221,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         ),
                                       ),
                                     ),
-                                    SizedBox(width: 15,),
+                                    const SizedBox(width: 15,),
                                     GestureDetector(
                                       onTap: () {
-                                          ShowGeneralDialog.Message_Dialog(
+                                          ShowGeneralDialog.Message_Room_Dialog(
                                               context: context,
-                                              userId: widget.uid,
+                                              userId: widget.otherUid,
                                               userName: widget.userName,
                                               fullName: widget.fullName);
                                         },
                                       child: Container(
-                                        padding: EdgeInsets.symmetric(
+                                        padding: const EdgeInsets.symmetric(
                                             horizontal: 15, vertical: 5),
                                         decoration: BoxDecoration(
                                             borderRadius: BorderRadius.circular(50),
@@ -202,7 +239,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         ),
                                         child: Text(
                                           "Message",
-                                          style: GoogleFonts.montserrat(
+                                          style: GoogleFonts.outfit(
                                               fontWeight: FontWeight.w600,
                                               fontSize: 13,
                                               color: Colors.white
@@ -216,19 +253,53 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
                           ],
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 10,
                         ),
-                        Text(
-                          widget.fullName ?? "Full Name",
-                          style: GoogleFonts.montserrat(
-                            fontSize: 25,
-                            fontWeight: FontWeight.w600,
-                          ),
+                        Row(
+                          children: [
+                            Text(
+                              widget.fullName ?? "Full Name",
+                              style: GoogleFonts.montserrat(
+                                fontSize: 25,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            IconButton(
+                              onPressed: () async {
+                                final result = await FriendsService().followUser(otherUserUid: widget.otherUid ?? '');
+
+                                if (result == null) {
+                                  // Thành công: hiển thị snackbar
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text('✅ Đã theo dõi người dùng'),
+                                      duration: Duration(seconds: 2),
+                                    ),
+                                  );
+                                } else {
+                                  // Nếu có lỗi trả về từ service
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text('❌ $result'),
+                                      duration: Duration(seconds: 2),
+                                    ),
+                                  );
+                                }
+
+                                print("follow");
+                              },
+
+                              icon: Icon(
+                                Icons.add
+                              ),
+                            ),
+                          ],
                         ),
+
                         Text(
-                          widget.userName ?? "User Name",
-                          style: GoogleFonts.montserrat(
+                          widget.userName ?? "@User Name",
+                          style: GoogleFonts.outfit(
                             fontSize: 15,
                           ),
                         ),
@@ -240,10 +311,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               Row(
                                 children: [
                                   Icon(Icons.home_filled, color: specs.bl150, size: 15),
-                                  SizedBox(width: 4),
+                                  const SizedBox(width: 4),
                                   Text(
                                     'From ${widget.placeOfBirth}, lives in ${widget.currentAddress}',
-                                    style: GoogleFonts.montserrat(color: specs.bl150),
+                                    style: GoogleFonts.outfit(color: specs.bl150),
                                   ),
                                 ],
                               )
@@ -251,10 +322,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               Row(
                                 children: [
                                   Icon(Icons.home_filled, color: specs.bl150, size: 15),
-                                  SizedBox(width: 4),
+                                  const SizedBox(width: 4),
                                   Text(
                                     'From ${widget.placeOfBirth}',
-                                    style: GoogleFonts.montserrat(color: specs.bl150),
+                                    style: GoogleFonts.outfit(color: specs.bl150),
                                   ),
                                 ],
                               )
@@ -262,14 +333,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 Row(
                                   children: [
                                     Icon(Icons.pin_drop_rounded, color: specs.bl150, size: 15),
-                                    SizedBox(width: 4),
+                                    const SizedBox(width: 4),
                                     Text(
                                       'Lives in ${widget.currentAddress} ',
-                                      style: GoogleFonts.montserrat(color: specs.bl150),
+                                      style: GoogleFonts.outfit(color: specs.bl150),
                                     ),
                                   ],
                                 )
-                              else Text(''),
+                              else const Text(''),
                           ],
                         ),
                       ],
@@ -277,11 +348,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                 ),
                 bottom: PreferredSize(
-                  preferredSize: Size.fromHeight(40),
+                  preferredSize: const Size.fromHeight(40),
                   child:Container(
                     height: 40,
                     width: specs.screenWidth,
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       color: Colors.white,
                     ),
                     child: Stack(
@@ -296,13 +367,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 });
                               },
                               child: Container(
-                                padding: EdgeInsets.symmetric(horizontal: 15),
+                                padding: const EdgeInsets.symmetric(horizontal: 15),
                                 child: Center(
                                   child: Text(
                                     "Posts",
-                                    style: GoogleFonts.montserrat(
+                                    style: GoogleFonts.outfit(
                                         fontSize: 13,
-                                      fontWeight: FontWeight.bold,
+                                      fontWeight: FontWeight.w600,
                                     ),
                                   ),
                                 ),
@@ -315,13 +386,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 });
                               },
                               child: Container(
-                                padding: EdgeInsets.symmetric(horizontal: 15),
+                                padding: const EdgeInsets.symmetric(horizontal: 15),
                                 child: Center(
                                   child: Text(
                                     "About",
-                                    style: GoogleFonts.montserrat(
+                                    style: GoogleFonts.outfit(
                                         fontSize: 13,
-                                      fontWeight: FontWeight.bold,
+                                      fontWeight: FontWeight.w600,
                                     ),
                                   ),
                                 ),
@@ -334,13 +405,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 });
                               },
                               child: Container(
-                                padding: EdgeInsets.symmetric(horizontal: 15),
+                                padding: const EdgeInsets.symmetric(horizontal: 15),
                                 child: Center(
                                   child: Text(
                                     "Movement history",
-                                    style: GoogleFonts.montserrat(
+                                    style: GoogleFonts.outfit(
                                         fontSize: 13,
-                                      fontWeight: FontWeight.bold,
+                                      fontWeight: FontWeight.w600,
                                     ),
                                   ),
                                 ),
@@ -350,11 +421,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ],
                         ),
                         AnimatedPositioned(
-                          duration: Duration(milliseconds: 200),
+                          duration: const Duration(milliseconds: 200),
                           top: 38,
                           left: (onPage == 0) ? 0 : (onPage == 1 ? 70 : (onPage == 2 ? 145 : 65)),
                           child: AnimatedContainer(
-                            duration: Duration(milliseconds: 200),
+                            duration: const Duration(milliseconds: 200),
                             height: 3,
                             width: (onPage == 0) ? 65 : (onPage == 1 ? 65 : (onPage == 2 ? 140 : 65)),
                             decoration: BoxDecoration(
@@ -368,27 +439,32 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
               ),
               SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  (BuildContext context, int index) {
-                    return Padding(
-                      padding:
-                          EdgeInsets.only(left: 20, bottom: 20, right: 10, top: 0),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(30),
-                          color: Colors.red,
-                        ),
-                        height: 200,
-                        width: MediaQuery.of(context).size.width,
-                      ),
-                    );
-                  },
-                  childCount: 20,
+                delegate: SliverChildListDelegate(
+                  _posts.map((post) => Post(
+                    postId: post['postId'],
+                    ownerId: post['ownerId'],
+                    timestamp: TimeProcessing.formatTimestamp(post['timestamp']),
+                    userName: '${post['userData']['userName'] ?? 'username'}',
+                    fullName: post['userData']['fullName'] ?? 'Full Name',
+                    phoneNumber: post['userData']['phoneNumber'] ?? 'Phone Number',
+                    sex: post['userData']['sex'],
+                    content: post['content'],
+                    vehicleType: post['vehicleType'],
+                    numberOfSeats: post['numberOfSeats'],
+                    departureTime: TimeProcessing.formatDepartureTime(post['departureTime']),
+                    expense: post['expense'],
+                    status: post['status'],
+                    startLocation: post['startLocation'],
+                    endLocation: post['endLocation'],
+                    likeUserIds: List<String>.from(post['likeUserIds']),
+                    comments: List<Map<String, dynamic>>.from(post['comments']),
+                    informationAboutCompanion: List<Map<String, dynamic>>.from(post['companionIds'] ?? []),
+                  )).toList(),
                 ),
               ),
             ],
           ),
-          Container(
+          SizedBox(
             height: _dynamicHeight,
             width: specs.screenWidth,
              child: Image.asset(
@@ -405,7 +481,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   0.4 +
                   0.6, // scale từ 1.0 đến 0.6
               alignment: Alignment.center,
-              child: Container(
+              child: SizedBox(
                 height: 103,
                 width: 103,
                 child: Stack(
@@ -416,7 +492,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           width: 100,
                           height: 100,
                           color: specs.bl240,
-                          child: Icon(
+                          child: const Icon(
                             Icons.person,
                             size: 60,
                           ),
@@ -439,7 +515,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
               ),
             ),
+          ),
+
+          IconButton(
+            icon: const Icon(Icons.logout),
+            onPressed: () async {
+              await FirebaseAuth.instance.signOut();
+              Navigator.of(context).pushReplacementNamed('/login');
+            },
           )
+
 
         ],
       ),
